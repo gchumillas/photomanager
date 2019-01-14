@@ -13,7 +13,11 @@ func main() {
 	// client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
 
 	r := mux.NewRouter()
-	r.HandleFunc("/home", handler.GetHome).Methods("GET")
+
+	r.HandleFunc("/categories", handler.GetCategories).Methods("GET")
+	r.HandleFunc("/categories/{id}", handler.GetCategory).Methods("GET")
+	r.HandleFunc("/categories", handler.PostCategory).Methods("POST")
+	r.HandleFunc("/categories", handler.PutCategory).Methods("PUT")
 
 	// TODO: configuration needed
 	log.Printf("Server started at port %v", "8080")
