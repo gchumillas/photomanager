@@ -15,6 +15,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/home", handler.GetHome).Methods("GET")
 
+	// TODO: configuration needed
 	log.Printf("Server started at port %v", "8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
