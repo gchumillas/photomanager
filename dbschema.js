@@ -1,13 +1,13 @@
 // The following script creates the structure of the application database.
 //
 // Open a terminal and execute the following command:
-// mongo <database name> create_db_schema.js
+// mongo <database name> dbschema.js
 //
 // Alternatively you can execute following commands:
 //
 // mongo
 // use <database name>
-// load('path/to/create_db_schema.js')
+// load('path/to/dbschema.js')
 
 print('Create images collection');
 db.createCollection(
@@ -23,7 +23,9 @@ db.createCollection(
           }
         }
       }
-    }
+    },
+    validationLevel: "strict",
+    validationAction: "error"
   }
 );
 
@@ -34,7 +36,7 @@ db.createCollection(
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name'],
+        required: ['name', 'imageIds'],
         properties: {
           name: {
             bsonType: 'string'
@@ -44,10 +46,15 @@ db.createCollection(
             items: {
               bsonType: 'objectId'
             }
+          },
+          parentCategoryId: {
+            bsonType: 'objectId'
           }
         }
       }
-    }
+    },
+    validationLevel: "strict",
+    validationAction: "error"
   }
 );
 
@@ -71,6 +78,8 @@ db.createCollection(
           }
         }
       }
-    }
+    },
+    validationLevel: "strict",
+    validationAction: "error"
   }
 );
