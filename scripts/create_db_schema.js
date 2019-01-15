@@ -6,8 +6,8 @@
 // Alternatively you can execute following commands:
 //
 // mongo
-// use photomanager
-// load('create_db_schema.js')
+// use <database name>
+// load('path/to/create_db_schema.js')
 
 print('Create images collection');
 db.createCollection(
@@ -58,13 +58,16 @@ db.createCollection(
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'categoryId'],
+        required: ['name'],
         properties: {
           name: {
             bsonType: 'string'
           },
-          categoryId: {
-            bsonType: 'objectId'
+          categoryIds: {
+            bsonType: 'array',
+            items: {
+              bsonType: 'objectId'
+            }
           }
         }
       }
