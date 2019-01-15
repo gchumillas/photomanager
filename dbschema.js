@@ -7,7 +7,7 @@
 //
 // mongo
 // use <database name>
-// load('path/to/dbschema.js')
+// load('dbschema.js')
 
 print('Create images collection');
 db.createCollection(
