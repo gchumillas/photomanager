@@ -1,19 +1,21 @@
 package handler
 
-import "net/http"
+import (
+	"net/http"
+)
 
-func GetCategories(w http.ResponseWriter, r *http.Request) {
+func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func GetCategory(w http.ResponseWriter, r *http.Request) {
+func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func PostCategory(w http.ResponseWriter, r *http.Request) {
+func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func PutCategory(w http.ResponseWriter, r *http.Request) {
+func (env *Env) PutCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }
