@@ -24,8 +24,8 @@ db.createCollection(
         }
       }
     },
-    validationLevel: "strict",
-    validationAction: "error"
+    validationLevel: 'strict',
+    validationAction: 'error'
   }
 );
 
@@ -53,8 +53,8 @@ db.createCollection(
         }
       }
     },
-    validationLevel: "strict",
-    validationAction: "error"
+    validationLevel: 'strict',
+    validationAction: 'error'
   }
 );
 
@@ -79,7 +79,7 @@ db.createCollection(
         }
       }
     },
-    validationLevel: "strict",
-    validationAction: "error"
+    validationLevel: 'strict',
+    validationAction: 'error'
   }
 );
