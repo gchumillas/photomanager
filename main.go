@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gchumillas/photomanager/handler"
@@ -11,17 +13,32 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
+var config struct {
+	MongoURI   string
+	ServerPort string
+}
+
 func main() {
+	file, err := os.Open("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	decoder := json.NewDecoder(file)
+	error := decoder.Decode(&config)
+	if error != nil {
+		log.Fatal(error)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
+	client, err := mongo.Connect(ctx, config.MongoURI)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	env := handler.NewEnv(client)
-
 	r := mux.NewRouter()
 	r.HandleFunc("/categories", env.GetCategories).Methods("GET")
 	r.HandleFunc("/categories/{id}", env.GetCategory).Methods("GET")
@@ -29,6 +46,6 @@ func main() {
 	r.HandleFunc("/categories", env.PutCategory).Methods("PUT")
 
 	// TODO: configuration needed
-	log.Printf("Server started at port %v", "8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Printf("Server started at port %v", config.ServerPort)
+	log.Fatal(http.ListenAndServe(config.ServerPort, r))
 }
