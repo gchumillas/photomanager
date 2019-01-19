@@ -8,6 +8,10 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }

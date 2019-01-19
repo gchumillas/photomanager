@@ -1,4 +1,5 @@
 {
+  "APIVersion": "v1",
   "MongoURI": "mongodb://localhost:27017",
   "ServerPort": "localhost:8080"
 }
