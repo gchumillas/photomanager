@@ -42,7 +42,6 @@ func main() {
 	}
 
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
-
 	env := handler.NewEnv(client)
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
