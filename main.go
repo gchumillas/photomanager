@@ -43,7 +43,7 @@ func main() {
 	r.HandleFunc("/categories", env.GetCategories).Methods("GET")
 	r.HandleFunc("/categories/{id}", env.GetCategory).Methods("GET")
 	r.HandleFunc("/categories", env.PostCategory).Methods("POST")
-	r.HandleFunc("/categories", env.PutCategory).Methods("PUT")
+	r.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
 
 	// TODO: configuration needed
 	log.Printf("Server started at port %v", config.ServerPort)
