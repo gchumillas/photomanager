@@ -41,17 +41,19 @@ func main() {
 		log.Fatal(err)
 	}
 
+	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
+
 	env := handler.NewEnv(client)
 	r := mux.NewRouter()
-	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
 	s := r.PathPrefix(prefix).Subrouter()
+
+	// categories routes
 	s.HandleFunc("/categories", env.GetSubcategories).Methods("GET")
 	s.HandleFunc("/subcategories/{categoryId}", env.GetSubcategories).Methods("GET")
 	s.HandleFunc("/categories/{id}", env.GetCategory).Methods("GET")
 	s.HandleFunc("/categories", env.PostCategory).Methods("POST")
 	s.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
 
-	// TODO: configuration needed
 	log.Printf("Server started at port %v", config.ServerPort)
 	log.Fatal(http.ListenAndServe(config.ServerPort, r))
 }
