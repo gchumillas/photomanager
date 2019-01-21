@@ -3,9 +3,9 @@ package handler
 import "github.com/mongodb/mongo-go-driver/mongo"
 
 type Env struct {
-	client *mongo.Client
+	db *mongo.Database
 }
 
-func NewEnv(client *mongo.Client) *Env {
-	return &Env{client}
+func NewEnv(db *mongo.Database) *Env {
+	return &Env{db}
 }

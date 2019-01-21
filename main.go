@@ -18,6 +18,7 @@ import (
 var config struct {
 	APIVersion string
 	MongoURI   string
+	MongoDB    string
 	ServerPort string
 }
 
@@ -41,8 +42,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	db := client.Database(config.MongoDB)
+	env := handler.NewEnv(db)
+
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
-	env := handler.NewEnv(client)
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
 
