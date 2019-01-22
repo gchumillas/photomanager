@@ -1,18 +1,16 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gchumillas/photomanager/handler"
+	"github.com/globalsign/mgo"
 	"github.com/gorilla/mux"
-	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
 var config struct {
@@ -34,16 +32,20 @@ func main() {
 		log.Fatal(error)
 	}
 
-	// TODO: avoid using context. It adds unnecessary complexity to the code. Consider using another approach, such as a class wrapper.
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := mongo.Connect(ctx, config.MongoURI)
+	// Connects to MongoDB.
+	session, err := mgo.Dial(config.MongoURI)
+	defer session.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db := client.Database(config.MongoDB)
+	// Checks connection.
+	err = session.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db := session.DB(config.MongoDB)
 	env := handler.NewEnv(db)
 
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
