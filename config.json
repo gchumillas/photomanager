@@ -1,6 +1,0 @@
-{
-  "APIVersion": "v1",
-  "MongoURI": "mongodb://localhost:27017",
-  "MongoDB": "photomanager",
-  "ServerPort": "localhost:8080"
-}
