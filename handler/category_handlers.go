@@ -2,9 +2,12 @@ package handler
 
 import (
 	"net/http"
+
+	"github.com/gchumillas/photomanager/manager"
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
+	manager.GetAllCategories(env.db)
 	return
 }
 

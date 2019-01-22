@@ -34,6 +34,7 @@ func main() {
 		log.Fatal(error)
 	}
 
+	// TODO: avoid using context. It adds unnecessary complexity to the code. Consider using another approach, such as a class wrapper.
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
