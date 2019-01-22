@@ -17,7 +17,7 @@ var config struct {
 	APIVersion string
 	MongoURI   string
 	MongoDB    string
-	ServerPort string
+	ServerAddr string
 }
 
 func main() {
@@ -59,6 +59,6 @@ func main() {
 	s.HandleFunc("/categories", env.PostCategory).Methods("POST")
 	s.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
 
-	log.Printf("Server started at port %v", config.ServerPort)
-	log.Fatal(http.ListenAndServe(config.ServerPort, r))
+	log.Printf("Server started at port %v", config.ServerAddr)
+	log.Fatal(http.ListenAndServe(config.ServerAddr, r))
 }
