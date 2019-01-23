@@ -1,6 +1,8 @@
 {
   "APIVersion": "v1",
+  "ServerAddr": "localhost:8080",
   "MongoURI": "mongodb://localhost:27017",
   "MongoDB": "<database name>",
-  "ServerPort": "localhost:8080"
+  "MongoUser": "<user name>",
+  "MongoPass": "<password>"
 }

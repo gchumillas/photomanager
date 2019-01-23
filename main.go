@@ -15,9 +15,11 @@ import (
 
 var config struct {
 	APIVersion string
+	ServerAddr string
 	MongoURI   string
 	MongoDB    string
-	ServerAddr string
+	MongoUser  string
+	MongoPass  string
 }
 
 func main() {
@@ -47,6 +49,11 @@ func main() {
 
 	db := session.DB(config.MongoDB)
 	env := handler.NewEnv(db)
+
+	log.Println(config)
+	if err = db.Login(config.MongoDB, config.MongoPass); err != nil {
+		log.Fatal(err)
+	}
 
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
 	r := mux.NewRouter()
