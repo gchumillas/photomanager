@@ -28,7 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := dbConnect(conf)
+	db, err := connectToDB(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +66,7 @@ func loadConfig(filename string) (conf config, err error) {
 	return
 }
 
-func dbConnect(conf config) (db *mgo.Database, err error) {
+func connectToDB(conf config) (db *mgo.Database, err error) {
 	session, err := mgo.Dial(conf.MongoURI)
 	if err != nil {
 		return
