@@ -28,21 +28,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Connects to MongoDB.
-	session, err := mgo.Dial(conf.MongoURI)
-	defer session.Close()
+	db, err := dbConnect(conf)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Checks connection.
-	err = session.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db := session.DB(conf.MongoDB)
-	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
 		log.Fatal(err)
 	}
 
@@ -73,6 +60,26 @@ func loadConfig(filename string) (conf config, err error) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
+		return
+	}
+
+	return
+}
+
+func dbConnect(conf config) (db *mgo.Database, err error) {
+	session, err := mgo.Dial(conf.MongoURI)
+	if err != nil {
+		return
+	}
+	defer session.Close()
+
+	err = session.Ping()
+	if err != nil {
+		return
+	}
+
+	db = session.DB(conf.MongoDB)
+	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
 		return
 	}
 
