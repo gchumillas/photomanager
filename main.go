@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var config struct {
+type config struct {
 	APIVersion string
 	ServerAddr string
 	MongoURI   string
@@ -23,10 +23,13 @@ var config struct {
 }
 
 func main() {
-	loadConfig()
+	conf, err := loadConfig("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Connects to MongoDB.
-	session, err := mgo.Dial(config.MongoURI)
+	session, err := mgo.Dial(conf.MongoURI)
 	defer session.Close()
 	if err != nil {
 		log.Fatal(err)
@@ -38,13 +41,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db := session.DB(config.MongoDB)
-	if err = db.Login(config.MongoUser, config.MongoPass); err != nil {
+	db := session.DB(conf.MongoDB)
+	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
 		log.Fatal(err)
 	}
 
 	env := handler.NewEnv(db)
-	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
+	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
 
@@ -55,19 +58,23 @@ func main() {
 	s.HandleFunc("/categories", env.PostCategory).Methods("POST")
 	s.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
 
-	log.Printf("Server started at port %v", config.ServerAddr)
-	log.Fatal(http.ListenAndServe(config.ServerAddr, r))
+	log.Printf("Server started at port %v", conf.ServerAddr)
+	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
 }
 
-func loadConfig() {
-	file, err := os.Open("config.json")
+func loadConfig(filename string) (conf config, err error) {
+	conf = config{}
+
+	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	decoder := json.NewDecoder(file)
-	error := decoder.Decode(&config)
-	if error != nil {
-		log.Fatal(error)
+	err = decoder.Decode(&conf)
+	if err != nil {
+		return
 	}
+
+	return
 }
