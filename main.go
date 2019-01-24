@@ -23,16 +23,7 @@ var config struct {
 }
 
 func main() {
-	file, err := os.Open("config.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	decoder := json.NewDecoder(file)
-	error := decoder.Decode(&config)
-	if error != nil {
-		log.Fatal(error)
-	}
+	loadConfig()
 
 	// Connects to MongoDB.
 	session, err := mgo.Dial(config.MongoURI)
@@ -68,4 +59,17 @@ func main() {
 
 	log.Printf("Server started at port %v", config.ServerAddr)
 	log.Fatal(http.ListenAndServe(config.ServerAddr, r))
+}
+
+func loadConfig() {
+	file, err := os.Open("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	decoder := json.NewDecoder(file)
+	error := decoder.Decode(&config)
+	if error != nil {
+		log.Fatal(error)
+	}
 }
