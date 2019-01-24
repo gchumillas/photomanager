@@ -39,13 +39,11 @@ func main() {
 	}
 
 	db := session.DB(config.MongoDB)
-	env := handler.NewEnv(db)
-
-	log.Println(config)
-	if err = db.Login(config.MongoDB, config.MongoPass); err != nil {
+	if err = db.Login(config.MongoUser, config.MongoPass); err != nil {
 		log.Fatal(err)
 	}
 
+	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(config.APIVersion, "/"))
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
