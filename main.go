@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gchumillas/photomanager/handler"
+	"github.com/gchumillas/photomanager/middleware"
 	"github.com/globalsign/mgo"
 	"github.com/gorilla/mux"
 )
@@ -39,17 +40,21 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// middlewares
+	jsonCType := middleware.NewContentType("application/json")
+
 	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
-	s := r.PathPrefix(prefix).Subrouter()
 
 	// categories routes
-	s.HandleFunc("/categories", env.GetCategories).Methods("GET")
-	s.HandleFunc("/subcategories/{categoryId}", env.GetSubcategories).Methods("GET")
-	s.HandleFunc("/categories/{id}", env.GetCategory).Methods("GET")
-	s.HandleFunc("/categories", env.PostCategory).Methods("POST")
-	s.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
+	cats := r.PathPrefix(prefix).Subrouter()
+	cats.HandleFunc("/categories", env.GetCategories).Methods("GET")
+	cats.HandleFunc("/subcategories/{categoryId}", env.GetSubcategories).Methods("GET")
+	cats.HandleFunc("/categories/{id}", env.GetCategory).Methods("GET")
+	cats.HandleFunc("/categories", env.PostCategory).Methods("POST")
+	cats.HandleFunc("/categories/{id}", env.PutCategory).Methods("PUT")
+	cats.Use(jsonCType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
