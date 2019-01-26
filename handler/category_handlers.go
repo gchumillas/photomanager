@@ -1,13 +1,22 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gchumillas/photomanager/manager"
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	manager.GetCategories(env.db)
+	var items []manager.Category
+	if err := manager.GetCategories(env.db, &items); err != nil {
+		log.Fatal(err)
+	}
+
+	for _, item := range items {
+		log.Println(item.Name)
+	}
+
 	return
 }
 

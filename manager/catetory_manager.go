@@ -5,20 +5,15 @@ import (
 )
 
 type Category struct {
-	name string
+	Name string
 }
 
-func GetCategories(db *mgo.Database) ([]Category, error) {
-	// categories := db.Collection("categories")
-	//
-	// cur, err := categories.Find(context.Background(), nil)
-	// defer cur.Close(context.Background())
-	//
-	// for cur.Next(context.Background()) {
-	// 	// do something
-	// }
-	//
-	// return nil, err
-
-	return nil, nil
+func GetCategories(db *mgo.Database, items *[]Category) error {
+	return db.C("categories").Find(nil).All(items)
 }
+
+// func GetCategories(db *mgo.Database) (items []Category, err error) {
+// 	err = db.C("categories").Find(nil).All(&items)
+//
+// 	return
+// }
