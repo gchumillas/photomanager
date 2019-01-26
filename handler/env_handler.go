@@ -5,14 +5,9 @@ import (
 )
 
 type Env struct {
-	session *mgo.Session
+	db *mgo.Database
 }
 
-func NewEnv(session *mgo.Session) *Env {
-	return &Env{session}
-}
-
-// Gets the selected Database.
-func (env *Env) DB() *mgo.Database {
-	return env.session.DB("")
+func NewEnv(db *mgo.Database) *Env {
+	return &Env{db}
 }

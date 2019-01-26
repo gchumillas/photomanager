@@ -28,13 +28,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	session, err := connectToDB(conf)
+	session, db, err := connectToDB(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer session.Close()
 
-	env := handler.NewEnv(session)
+	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
@@ -67,7 +67,7 @@ func loadConfig(filename string) (conf config, err error) {
 	return
 }
 
-func connectToDB(conf config) (session *mgo.Session, err error) {
+func connectToDB(conf config) (session *mgo.Session, db *mgo.Database, err error) {
 	session, err = mgo.Dial(conf.MongoURI)
 	if err != nil {
 		return
@@ -78,7 +78,7 @@ func connectToDB(conf config) (session *mgo.Session, err error) {
 		return
 	}
 
-	db := session.DB(conf.MongoDB)
+	db = session.DB(conf.MongoDB)
 	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
 		return
 	}

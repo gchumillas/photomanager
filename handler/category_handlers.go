@@ -7,7 +7,7 @@ import (
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	manager.GetCategories(env.DB())
+	manager.GetCategories(env.db)
 	return
 }
 
