@@ -7,5 +7,3 @@ Replace `DATABASE_NAME` with the real name of the database and run the following
 ```bash
 mongo DATABASE_NAME dbschema.js
 ```
-
-## Configuration
