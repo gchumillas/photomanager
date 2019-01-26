@@ -8,7 +8,7 @@ type Category struct {
 	name string
 }
 
-func GetAllCategories(db *mgo.Database) ([]Category, error) {
+func GetCategories(db *mgo.Database) ([]Category, error) {
 	// categories := db.Collection("categories")
 	//
 	// cur, err := categories.Find(context.Background(), nil)
