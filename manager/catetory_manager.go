@@ -5,7 +5,7 @@ import (
 )
 
 type Category struct {
-	Name string
+	Name string `json:"name"`
 }
 
 func GetCategories(db *mgo.Database, items *[]Category) error {
