@@ -1,4 +1,4 @@
-package manager
+package srvmanager
 
 type User struct {
 	name string
