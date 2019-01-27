@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gchumillas/photomanager/manager"
+	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/mux"
 )
 
@@ -23,6 +24,11 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	categoryId := params["id"]
+
+	if !bson.IsObjectIdHex(categoryId) {
+		http.Error(w, "Invalid category ID", http.StatusBadRequest)
+		return
+	}
 
 	if err := manager.GetSubcategories(env.db, categoryId, &items); err != nil {
 		log.Fatal(err)
