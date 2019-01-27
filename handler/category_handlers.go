@@ -20,8 +20,6 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
-	var items []manager.Category
-
 	params := mux.Vars(r)
 	categoryId := params["id"]
 
@@ -30,6 +28,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	items := []manager.Category{}
 	if err := manager.GetSubcategories(env.db, categoryId, &items); err != nil {
 		log.Fatal(err)
 	}
