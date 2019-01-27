@@ -2,10 +2,12 @@ package manager
 
 import (
 	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 )
 
 type Category struct {
-	Name string `json:"name"`
+	ID   bson.ObjectId `json:"id" bson:"_id"`
+	Name string        `json:"name"`
 }
 
 func GetCategories(db *mgo.Database, items *[]Category) error {
