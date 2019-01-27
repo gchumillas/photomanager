@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gchumillas/photomanager/srvmanager"
+	"github.com/gchumillas/photomanager/manager"
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	var items []srvmanager.Category
-	if err := srvmanager.GetCategories(env.db, &items); err != nil {
+	var items []manager.Category
+	if err := manager.GetCategories(env.db, &items); err != nil {
 		log.Fatal(err)
 	}
 

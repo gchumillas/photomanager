@@ -1,4 +1,4 @@
-package srvmanager
+package manager
 
 import (
 	"github.com/globalsign/mgo"
