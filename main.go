@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// middlewares
-	jsonCType := middleware.NewContentType("application/json")
+	jsonCType := middleware.NewContentType("application/json; charset=utf-8")
 
 	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
