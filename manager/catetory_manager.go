@@ -13,3 +13,9 @@ type Category struct {
 func GetCategories(db *mgo.Database, items *[]Category) error {
 	return db.C("categories").Find(nil).All(items)
 }
+
+func GetSubcategories(db *mgo.Database, categoryId string, items *[]Category) error {
+	filter := bson.M{"parentCategoryId": bson.ObjectIdHex(categoryId)}
+
+	return db.C("categories").Find(filter).All(items)
+}

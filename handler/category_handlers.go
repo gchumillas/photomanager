@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gchumillas/photomanager/manager"
+	"github.com/gorilla/mux"
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +19,16 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
-	return
+	var items []manager.Category
+
+	params := mux.Vars(r)
+	categoryId := params["id"]
+
+	if err := manager.GetSubcategories(env.db, categoryId, &items); err != nil {
+		log.Fatal(err)
+	}
+
+	json.NewEncoder(w).Encode(items)
 }
 
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {

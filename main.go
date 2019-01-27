@@ -51,10 +51,10 @@ func main() {
 	// categories routes
 	cats := s.PathPrefix("/categories").Subrouter()
 	cats.HandleFunc("/", env.GetCategories).Methods("GET")
-	cats.HandleFunc("/{id:[0-9]+}/subcategories", env.GetSubcategories).Methods("GET")
-	cats.HandleFunc("/{id:[0-9]+}", env.GetCategory).Methods("GET")
+	cats.HandleFunc("/{id}/subcategories/", env.GetSubcategories).Methods("GET")
+	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
 	cats.HandleFunc("/", env.PostCategory).Methods("POST")
-	cats.HandleFunc("/{id:[0-9]+}", env.PutCategory).Methods("PUT")
+	cats.HandleFunc("/{id}", env.PutCategory).Methods("PUT")
 	cats.Use(jsonCType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
