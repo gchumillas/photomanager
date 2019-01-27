@@ -11,7 +11,7 @@ import (
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	var items []manager.Category
+	items := []manager.Category{}
 	if err := manager.GetCategories(env.db, &items); err != nil {
 		log.Fatal(err)
 	}
