@@ -24,7 +24,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, "Invalid category ID", http.StatusBadRequest)
+		http.Error(w, "Bad ID", http.StatusBadRequest)
 		return
 	}
 
