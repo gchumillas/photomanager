@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// middlewares
-	jsonCType := middleware.NewContentType("application/json; charset=utf-8")
+	cType := middleware.NewContentType("application/json; charset=utf-8")
 
 	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
@@ -55,7 +55,7 @@ func main() {
 	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
 	cats.HandleFunc("", env.PostCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.PutCategory).Methods("PUT")
-	cats.Use(jsonCType.Middleware)
+	cats.Use(cType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
