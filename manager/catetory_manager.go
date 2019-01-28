@@ -19,3 +19,7 @@ func GetSubcategories(db *mgo.Database, categoryId string, items *[]Category) er
 
 	return db.C("categories").Find(filter).All(items)
 }
+
+func GetCategory(db *mgo.Database, categoryId string, item *Category) error {
+	return db.C("categories").FindId(bson.ObjectIdHex(categoryId)).One(item)
+}

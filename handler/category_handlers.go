@@ -37,7 +37,20 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
-	return
+	params := mux.Vars(r)
+	categoryId := params["id"]
+
+	if !bson.IsObjectIdHex(categoryId) {
+		http.Error(w, "Bad ID", http.StatusBadRequest)
+		return
+	}
+
+	item := manager.Category{}
+	if err := manager.GetCategory(env.db, categoryId, &item); err != nil {
+		log.Fatal(err)
+	}
+
+	json.NewEncoder(w).Encode(item)
 }
 
 func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
