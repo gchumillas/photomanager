@@ -45,15 +45,15 @@ func main() {
 
 	env := handler.NewEnv(db)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 	s := r.PathPrefix(prefix).Subrouter()
 
 	// categories routes
 	cats := s.PathPrefix("/categories").Subrouter()
-	cats.HandleFunc("/", env.GetCategories).Methods("GET")
-	cats.HandleFunc("/{id}/subcategories/", env.GetSubcategories).Methods("GET")
+	cats.HandleFunc("", env.GetCategories).Methods("GET")
+	cats.HandleFunc("/{id}/subcategories", env.GetSubcategories).Methods("GET")
 	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
-	cats.HandleFunc("/", env.PostCategory).Methods("POST")
+	cats.HandleFunc("", env.PostCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.PutCategory).Methods("PUT")
 	cats.Use(jsonCType.Middleware)
 
