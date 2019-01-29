@@ -60,3 +60,7 @@ func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
 func (env *Env) PutCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }
+
+func (env *Env) DelCategory(w http.ResponseWriter, r *http.Request) {
+	return
+}
