@@ -6,8 +6,9 @@ import (
 )
 
 type Category struct {
-	ID   bson.ObjectId `json:"id" bson:"_id"`
-	Name string        `json:"name"`
+	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
+	Name     string          `json:"name"`
+	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
 func GetCategories(db *mgo.Database, items *[]Category) error {
@@ -22,4 +23,8 @@ func GetSubcategories(db *mgo.Database, categoryId string, items *[]Category) er
 
 func GetCategory(db *mgo.Database, categoryId string, item *Category) error {
 	return db.C("categories").FindId(bson.ObjectIdHex(categoryId)).One(item)
+}
+
+func NewCategory(db *mgo.Database, item *Category) error {
+	return db.C("categories").Insert(item)
 }
