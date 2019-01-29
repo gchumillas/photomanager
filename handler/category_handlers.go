@@ -41,7 +41,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, "Bad ID", http.StatusBadRequest)
+		http.Error(w, "The parameters are not valid.", http.StatusBadRequest)
 		return
 	}
 
@@ -54,6 +54,22 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
+	var payload struct {
+		Name string
+	}
+
+	d := json.NewDecoder(r.Body)
+	if err := d.Decode(&payload); err != nil {
+		http.Error(w, "The payload is not well formed.", http.StatusBadRequest)
+		return
+	}
+
+	cat := &manager.Category{
+		Name:     payload.Name,
+		ImageIDs: []bson.ObjectId{},
+	}
+	manager.NewCategory(env.db, cat)
+
 	return
 }
 
