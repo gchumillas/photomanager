@@ -28,3 +28,7 @@ func GetCategory(db *mgo.Database, categoryId string, item *Category) error {
 func InsertCategory(db *mgo.Database, item *Category) error {
 	return db.C("categories").Insert(item)
 }
+
+func UpdateCategory(db *mgo.Database, categoryId string, item *Category) error {
+	return db.C("categories").UpdateId(bson.ObjectIdHex(categoryId), item)
+}

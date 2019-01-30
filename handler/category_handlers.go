@@ -72,6 +72,33 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) EditCategory(w http.ResponseWriter, r *http.Request) {
+	// TODO: use a function
+	params := mux.Vars(r)
+	categoryId := params["id"]
+
+	// TODO: use constants
+	if !bson.IsObjectIdHex(categoryId) {
+		http.Error(w, "The parameters are not valid.", http.StatusBadRequest)
+		return
+	}
+
+	// TODO: use a function
+	var payload struct {
+		Name string
+	}
+
+	d := json.NewDecoder(r.Body)
+	if err := d.Decode(&payload); err != nil {
+		http.Error(w, "The payload is not well formed.", http.StatusBadRequest)
+		return
+	}
+
+	cat := &manager.Category{
+		ID:       bson.ObjectIdHex(categoryId),
+		Name:     payload.Name,
+		ImageIDs: []bson.ObjectId{},
+	}
+	manager.UpdateCategory(env.db, categoryId, cat)
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
