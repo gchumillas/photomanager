@@ -53,7 +53,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(item)
 }
 
-func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
+func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
 		Name string
 	}
