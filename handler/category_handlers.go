@@ -12,6 +12,8 @@ import (
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	items := []manager.Category{}
+
+	// TODO: es muy improbable que esta función falle
 	if err := manager.GetCategories(env.db, &items); err != nil {
 		log.Fatal(err)
 	}
@@ -48,9 +50,11 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 
 	item := manager.Category{}
 	if err := manager.GetCategory(env.db, categoryId, &item); err != nil {
-		log.Fatal(err)
+		http.Error(w, "Document not found.", http.StatusNotFound)
+		return
 	}
 
+	// TODO: should I manage the errors?
 	json.NewEncoder(w).Encode(item)
 }
 
@@ -99,7 +103,10 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	manager.UpdateCategory(env.db, categoryId, cat)
+	if err := manager.UpdateCategory(env.db, categoryId, cat); err != nil {
+		http.Error(w, "Document not found.", http.StatusNotFound)
+		return
+	}
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
