@@ -69,12 +69,10 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 		ImageIDs: []bson.ObjectId{},
 	}
 	manager.InsertCategory(env.db, cat)
-
-	return
 }
 
 func (env *Env) EditCategory(w http.ResponseWriter, r *http.Request) {
-	return
+	// return
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
