@@ -77,6 +77,6 @@ func (env *Env) EditCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (env *Env) DelCategory(w http.ResponseWriter, r *http.Request) {
+func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	return
 }

@@ -54,7 +54,7 @@ func main() {
 	cats.HandleFunc("", env.InsertCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.EditCategory).Methods("PUT")
-	cats.HandleFunc("/{id}", env.DelCategory).Methods("DEL")
+	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DEL")
 	cats.HandleFunc("/{id}/subcategories", env.GetSubcategories).Methods("GET")
 	cats.Use(cType.Middleware)
 
