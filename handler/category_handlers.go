@@ -23,6 +23,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	categoryId := params["id"]
 
+	// TODO: verify that category exists
 	if !bson.IsObjectIdHex(categoryId) {
 		http.Error(w, "Bad ID", http.StatusBadRequest)
 		return
