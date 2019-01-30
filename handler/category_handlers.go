@@ -72,9 +72,7 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) EditCategory(w http.ResponseWriter, r *http.Request) {
-	// return
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
-	return
 }
