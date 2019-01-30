@@ -68,7 +68,7 @@ func (env *Env) PostCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	manager.NewCategory(env.db, cat)
+	manager.InsertCategory(env.db, cat)
 
 	return
 }

@@ -25,6 +25,6 @@ func GetCategory(db *mgo.Database, categoryId string, item *Category) error {
 	return db.C("categories").FindId(bson.ObjectIdHex(categoryId)).One(item)
 }
 
-func NewCategory(db *mgo.Database, item *Category) error {
+func InsertCategory(db *mgo.Database, item *Category) error {
 	return db.C("categories").Insert(item)
 }
