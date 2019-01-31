@@ -25,7 +25,17 @@ type config struct {
 
 func main() {
 	conf := loadConfig("config.json")
-	db := connectToDb(conf)
+
+	session, err := mgo.Dial(conf.MongoURI)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
+
+	db := session.DB(conf.MongoDB)
+	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
+		log.Fatal(err)
+	}
 
 	// middlewares
 	cType := middleware.NewContentType("application/json; charset=utf-8")
@@ -60,21 +70,6 @@ func loadConfig(filename string) (conf config) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	return
-}
-
-func connectToDb(conf config) (db *mgo.Database) {
-	session, err := mgo.Dial(conf.MongoURI)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-
-	db = session.DB(conf.MongoDB)
-	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
 		log.Fatal(err)
 	}
 
