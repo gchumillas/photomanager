@@ -47,7 +47,6 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: should I manage the errors?
 	json.NewEncoder(w).Encode(item)
 }
 
