@@ -67,9 +67,8 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	categoryId := params["id"]
 
-	// TODO: use constants
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, "The parameters are not valid.", http.StatusBadRequest)
+		http.Error(w, badParamsErrror, http.StatusBadRequest)
 		return
 	}
 
