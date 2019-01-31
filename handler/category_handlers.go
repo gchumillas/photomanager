@@ -22,7 +22,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: verify that category exists
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, "Bad ID", http.StatusBadRequest)
+		http.Error(w, badParamsError, http.StatusBadRequest)
 		return
 	}
 
@@ -37,7 +37,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, "The parameters are not valid.", http.StatusBadRequest)
+		http.Error(w, badParamsError, http.StatusBadRequest)
 		return
 	}
 
