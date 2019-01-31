@@ -10,7 +10,7 @@ import (
 // Common bad request status errors.
 const (
 	badPayloadError = "The payload is not well formed."
-	badParamsErrror     = "The parameters are not valid."
+	badParamsError     = "The parameters are not valid."
 )
 
 type Env struct {

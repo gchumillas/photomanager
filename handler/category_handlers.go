@@ -68,7 +68,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, badParamsErrror, http.StatusBadRequest)
+		http.Error(w, badParamsError, http.StatusBadRequest)
 		return
 	}
 
