@@ -27,6 +27,7 @@ func GetSubcategories(db *mgo.Database, categoryId string, items *[]Category) {
 	}
 }
 
+// TODO: this method shouldn't return any error
 func GetCategory(db *mgo.Database, categoryId string, item *Category) error {
 	return db.C("categories").FindId(bson.ObjectIdHex(categoryId)).One(item)
 }
@@ -38,6 +39,7 @@ func InsertCategory(db *mgo.Database, item *Category) {
 }
 
 func UpdateCategory(db *mgo.Database, categoryId string, item *Category) {
+	// TODO: this line is too long
 	if err := db.C("categories").UpdateId(bson.ObjectIdHex(categoryId), item); err != nil {
 		log.Fatal(err)
 	}
