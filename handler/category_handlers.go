@@ -69,7 +69,6 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
-	// TODO: use a function
 	params := mux.Vars(r)
 	categoryId := params["id"]
 
