@@ -24,10 +24,7 @@ type config struct {
 }
 
 func main() {
-	conf, err := loadConfig("config.json")
-	if err != nil {
-		log.Fatal(err)
-	}
+	conf := loadConfig("config.json")
 
 	session, err := mgo.Dial(conf.MongoURI)
 	if err != nil {
@@ -62,18 +59,18 @@ func main() {
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
 }
 
-func loadConfig(filename string) (conf config, err error) {
+func loadConfig(filename string) (conf config) {
 	conf = config{}
 
 	file, err := os.Open(filename)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 
 	return

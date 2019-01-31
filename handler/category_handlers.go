@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gchumillas/photomanager/manager"
@@ -12,11 +11,7 @@ import (
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	items := []manager.Category{}
-
-	// TODO: es muy improbable que esta función falle
-	if err := manager.GetCategories(env.db, &items); err != nil {
-		log.Fatal(err)
-	}
+	manager.GetCategories(env.db, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
@@ -32,9 +27,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	}
 
 	items := []manager.Category{}
-	if err := manager.GetSubcategories(env.db, categoryId, &items); err != nil {
-		log.Fatal(err)
-	}
+	manager.GetSubcategories(env.db, categoryId, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
@@ -103,10 +96,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	if err := manager.UpdateCategory(env.db, categoryId, cat); err != nil {
-		http.Error(w, "Document not found.", http.StatusNotFound)
-		return
-	}
+	manager.UpdateCategory(env.db, categoryId, cat)
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
