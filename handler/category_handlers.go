@@ -54,12 +54,7 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
 		Name string
 	}
-
-	d := json.NewDecoder(r.Body)
-	if err := d.Decode(&payload); err != nil {
-		http.Error(w, "The payload is not well formed.", http.StatusBadRequest)
-		return
-	}
+	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
 		Name:     payload.Name,
@@ -78,16 +73,10 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: use a function
 	var payload struct {
 		Name string
 	}
-
-	d := json.NewDecoder(r.Body)
-	if err := d.Decode(&payload); err != nil {
-		http.Error(w, "The payload is not well formed.", http.StatusBadRequest)
-		return
-	}
+	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
 		ID:       bson.ObjectIdHex(categoryId),
