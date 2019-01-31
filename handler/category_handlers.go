@@ -22,7 +22,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: verify that category exists
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, badParamsError, http.StatusBadRequest)
+		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
 
@@ -37,13 +37,13 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, badParamsError, http.StatusBadRequest)
+		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
 
 	item := manager.Category{}
 	if err := manager.GetCategory(env.db, categoryId, &item); err != nil {
-		http.Error(w, "Document not found.", http.StatusNotFound)
+		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
 		return
 	}
 
@@ -68,7 +68,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	categoryId := params["id"]
 
 	if !bson.IsObjectIdHex(categoryId) {
-		http.Error(w, badParamsError, http.StatusBadRequest)
+		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
 

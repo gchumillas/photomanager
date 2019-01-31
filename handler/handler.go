@@ -7,10 +7,11 @@ import (
 	"github.com/globalsign/mgo"
 )
 
-// Common bad request status errors.
+// Common http request errors.
 const (
-	badPayloadError = "The payload is not well formed."
-	badParamsError     = "The parameters are not valid."
+	httpPayloadError     = "The payload is not well formed."
+	httpParamsError      = "The parameters are not valid."
+	httpDocNotFoundError = "Document not found."
 )
 
 type Env struct {
@@ -25,7 +26,7 @@ func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {
 	dec := json.NewDecoder(r.Body)
 
 	if err := dec.Decode(payload); err != nil {
-		http.Error(w, badPayloadError, http.StatusBadRequest)
+		http.Error(w, httpPayloadError, http.StatusBadRequest)
 		return
 	}
 }
