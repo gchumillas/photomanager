@@ -42,7 +42,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	item := manager.Category{}
-	if err := manager.GetCategory(env.db, categoryId, &item); err != nil {
+	if found := manager.GetCategory(env.db, categoryId, &item); !found {
 		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
 		return
 	}
@@ -82,7 +82,10 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	manager.UpdateCategory(env.db, categoryId, cat)
+	if found := manager.UpdateCategory(env.db, categoryId, cat); !found {
+		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
+		return
+	}
 }
 
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {

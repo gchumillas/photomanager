@@ -7,6 +7,7 @@ import (
 	"github.com/globalsign/mgo"
 )
 
+// TODO: this can be variables
 // Common http request errors.
 const (
 	httpPayloadError     = "The payload is not well formed."
