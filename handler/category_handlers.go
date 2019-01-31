@@ -18,31 +18,31 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	categoryId := params["id"]
+	catId := params["id"]
 
 	// TODO: verify that category exists
-	if !bson.IsObjectIdHex(categoryId) {
+	if !bson.IsObjectIdHex(catId) {
 		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
 
 	items := []manager.Category{}
-	manager.GetSubcategories(env.db, categoryId, &items)
+	manager.GetSubcategories(env.db, catId, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
 
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	categoryId := params["id"]
+	catId := params["id"]
 
-	if !bson.IsObjectIdHex(categoryId) {
+	if !bson.IsObjectIdHex(catId) {
 		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
 
 	item := manager.Category{}
-	if found := manager.GetCategory(env.db, categoryId, &item); !found {
+	if found := manager.GetCategory(env.db, catId, &item); !found {
 		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
 		return
 	}
@@ -65,9 +65,9 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 
 func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	categoryId := params["id"]
+	catId := params["id"]
 
-	if !bson.IsObjectIdHex(categoryId) {
+	if !bson.IsObjectIdHex(catId) {
 		http.Error(w, httpParamsError, http.StatusBadRequest)
 		return
 	}
@@ -78,11 +78,11 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
-		ID:       bson.ObjectIdHex(categoryId),
+		ID:       bson.ObjectIdHex(catId),
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	if found := manager.UpdateCategory(env.db, categoryId, cat); !found {
+	if found := manager.UpdateCategory(env.db, catId, cat); !found {
 		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
 		return
 	}

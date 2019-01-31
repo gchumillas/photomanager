@@ -23,6 +23,7 @@ type config struct {
 	MongoPass  string
 }
 
+// TODO: make tests.
 func main() {
 	conf := loadConfig("config.json")
 

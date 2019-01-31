@@ -21,17 +21,18 @@ func GetCategories(db *mgo.Database, items *[]Category) {
 }
 
 // TODO: pagination
-func GetSubcategories(db *mgo.Database, categoryId string, items *[]Category) {
-	filter := bson.M{"parentCategoryId": bson.ObjectIdHex(categoryId)}
+func GetSubcategories(db *mgo.Database, catId string, items *[]Category) {
+	filter := bson.M{"parentCategoryId": bson.ObjectIdHex(catId)}
 
 	if err := db.C("categories").Find(filter).All(items); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func GetCategory(db *mgo.Database, categoryId string, item *Category) (found bool) {
-	// TODO: this line is too long
-	if err := db.C("categories").FindId(bson.ObjectIdHex(categoryId)).One(item); err != nil {
+func GetCategory(db *mgo.Database, catId string, item *Category) (found bool) {
+	id := bson.ObjectIdHex(catId)
+
+	if err := db.C("categories").FindId(id).One(item); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
@@ -49,9 +50,10 @@ func InsertCategory(db *mgo.Database, item *Category) {
 	}
 }
 
-func UpdateCategory(db *mgo.Database, categoryId string, item *Category) (found bool) {
-	// TODO: this line is too long
-	if err := db.C("categories").UpdateId(bson.ObjectIdHex(categoryId), item); err != nil {
+func UpdateCategory(db *mgo.Database, catId string, item *Category) (found bool) {
+	id := bson.ObjectIdHex(catId)
+
+	if err := db.C("categories").UpdateId(id, item); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
