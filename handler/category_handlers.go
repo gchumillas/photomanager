@@ -22,7 +22,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: verify that category exists
 	if !bson.IsObjectIdHex(catId) {
-		http.Error(w, httpParamsError, http.StatusBadRequest)
+		httpError(w, badParamsError)
 		return
 	}
 
@@ -37,13 +37,13 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	catId := params["id"]
 
 	if !bson.IsObjectIdHex(catId) {
-		http.Error(w, httpParamsError, http.StatusBadRequest)
+		httpError(w, badParamsError)
 		return
 	}
 
 	item := manager.Category{}
 	if found := manager.GetCategory(env.db, catId, &item); !found {
-		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
+		httpError(w, docNotFoundError)
 		return
 	}
 
@@ -68,7 +68,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	catId := params["id"]
 
 	if !bson.IsObjectIdHex(catId) {
-		http.Error(w, httpParamsError, http.StatusBadRequest)
+		httpError(w, badParamsError)
 		return
 	}
 
@@ -83,7 +83,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		ImageIDs: []bson.ObjectId{},
 	}
 	if found := manager.UpdateCategory(env.db, catId, cat); !found {
-		http.Error(w, httpDocNotFoundError, http.StatusNotFound)
+		httpError(w, docNotFoundError)
 		return
 	}
 }
