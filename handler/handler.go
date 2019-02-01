@@ -16,7 +16,7 @@ type httpStatus struct {
 var (
 	payloadError     httpStatus = httpStatus{"The payload is not well formed.", 400}
 	docNotFoundError httpStatus = httpStatus{"The parameters are not valid.", 404}
-	badParamsError   httpStatus = httpStatus{"Bad request", 400}
+	badParamsError   httpStatus = httpStatus{"Bad parameters.", 400}
 )
 
 type Env struct {
