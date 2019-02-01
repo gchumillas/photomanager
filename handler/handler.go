@@ -23,7 +23,6 @@ type Env struct {
 	db *mgo.Database
 }
 
-// TODO: rename this
 func NewEnv(db *mgo.Database) *Env {
 	return &Env{db}
 }
