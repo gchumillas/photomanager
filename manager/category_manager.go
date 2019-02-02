@@ -24,6 +24,15 @@ func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	}
 }
 
+func GetNumCategories(db *mgo.Database, filter Filter) int {
+	count, err := db.C("categories").Find(filter.Query).Count()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return count
+}
+
 func GetCategory(db *mgo.Database, catId string, item *Category) (found bool) {
 	id := bson.ObjectIdHex(catId)
 

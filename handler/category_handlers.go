@@ -12,6 +12,17 @@ import (
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+	parentCatId := params["id"]
+
+	var query interface{}
+	if len(parentCatId) > 0 {
+		if !bson.IsObjectIdHex(parentCatId) {
+			httpError(w, badParamsError)
+			return
+		}
+
+		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatId)}
+	}
 
 	page, err := strconv.Atoi(params["page"])
 	if err != nil {
@@ -23,36 +34,28 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	filter := manager.Filter{
 		Skip:  page * env.maxItemsPerPage,
 		Limit: env.maxItemsPerPage,
+		Query: query,
 	}
 	manager.GetCategories(env.db, filter, &items)
 
-	json.NewEncoder(w).Encode(items)
-}
-
-func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	catId := params["id"]
-
-	page, err := strconv.Atoi(params["page"])
-	if err != nil {
-		httpError(w, badParamsError)
-		return
+	// Gets the number of pages.
+	// TODO: verify that page < numPages
+	numItems := manager.GetNumCategories(env.db, filter)
+	numPages := numItems / env.maxItemsPerPage
+	remainder := numItems % env.maxItemsPerPage
+	if remainder > 0 {
+		numPages++
 	}
 
-	if !bson.IsObjectIdHex(catId) {
-		httpError(w, badParamsError)
-		return
+	doc := map[string]interface{}{
+		"items": items,
+		"page": map[string]interface{}{
+			"current":  page,
+			"total":    numPages,
+			"maxItems": env.maxItemsPerPage,
+		},
 	}
-
-	items := []manager.Category{}
-	filter := manager.Filter{
-		Skip:  page * env.maxItemsPerPage,
-		Limit: env.maxItemsPerPage,
-		Query: bson.M{"parentCategoryId": bson.ObjectIdHex(catId)},
-	}
-	manager.GetCategories(env.db, filter, &items)
-
-	json.NewEncoder(w).Encode(items)
+	json.NewEncoder(w).Encode(doc)
 }
 
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
