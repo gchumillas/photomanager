@@ -20,11 +20,12 @@ var (
 )
 
 type Env struct {
-	db *mgo.Database
+	db              *mgo.Database
+	maxItemsPerPage int
 }
 
-func NewEnv(db *mgo.Database) *Env {
-	return &Env{db}
+func NewEnv(db *mgo.Database, maxItemsPerPage int) *Env {
+	return &Env{db, maxItemsPerPage}
 }
 
 func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {

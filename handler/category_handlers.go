@@ -19,8 +19,10 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	skip := page * env.maxItemsPerPage
+	limit := env.maxItemsPerPage
 	items := []manager.Category{}
-	manager.GetCategories(env.db, page, &items)
+	manager.GetCategories(env.db, skip, limit, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
@@ -43,6 +45,7 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	items := []manager.Category{}
 	manager.GetSubcategories(env.db, catId, page, &items)
 
+	// HATEOAS
 	json.NewEncoder(w).Encode(items)
 }
 

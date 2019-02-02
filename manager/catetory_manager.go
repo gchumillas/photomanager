@@ -18,9 +18,7 @@ const maxItemsPerPage = 3
 
 // TODO: pagination
 // TODO: sorting
-func GetCategories(db *mgo.Database, page int, items *[]Category) {
-	skip := page * maxItemsPerPage
-	limit := maxItemsPerPage
+func GetCategories(db *mgo.Database, skip, limit int, items *[]Category) {
 	cats := db.C("categories")
 
 	if err := cats.Find(nil).Skip(skip).Limit(limit).All(items); err != nil {

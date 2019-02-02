@@ -14,6 +14,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// TODO: move to the config file
+const MaxItemsPerPage = 3
+
 type config struct {
 	APIVersion string
 	ServerAddr string
@@ -41,7 +44,7 @@ func main() {
 	// middlewares
 	cType := middleware.NewContentType("application/json; charset=utf-8")
 
-	env := handler.NewEnv(db)
+	env := handler.NewEnv(db, MaxItemsPerPage)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()
