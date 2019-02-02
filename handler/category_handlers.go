@@ -46,15 +46,14 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		numPages++
 	}
 
-	doc := map[string]interface{}{
+	json.NewEncoder(w).Encode(map[string]interface{}{
 		"items": items,
 		"page": map[string]interface{}{
 			"current":  page,
 			"total":    numPages,
 			"maxItems": env.maxItemsPerPage,
 		},
-	}
-	json.NewEncoder(w).Encode(doc)
+	})
 }
 
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
