@@ -14,19 +14,16 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// TODO: move to the config file
-const MaxItemsPerPage = 3
-
 type config struct {
-	APIVersion string
-	ServerAddr string
-	MongoURI   string
-	MongoDB    string
-	MongoUser  string
-	MongoPass  string
+	APIVersion      string
+	ServerAddr      string
+	MaxItemsPerPage int
+	MongoURI        string
+	MongoDB         string
+	MongoUser       string
+	MongoPass       string
 }
 
-// TODO: make tests.
 func main() {
 	conf := loadConfig("config.json")
 
@@ -44,7 +41,7 @@ func main() {
 	// middlewares
 	cType := middleware.NewContentType("application/json; charset=utf-8")
 
-	env := handler.NewEnv(db, MaxItemsPerPage)
+	env := handler.NewEnv(db, conf.MaxItemsPerPage)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
 	s := r.PathPrefix(prefix).Subrouter()

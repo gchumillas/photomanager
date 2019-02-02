@@ -1,4 +1,3 @@
-// TODO: please rename this file!
 package manager
 
 import (
@@ -14,12 +13,7 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
-// TODO: move to config file
-const maxItemsPerPage = 3
-
-// TODO: pagination
 // TODO: sorting
-// TODO: add a filter?
 func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	if err := db.C("categories").
 		Find(filter.Query).
