@@ -26,6 +26,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	}
 	manager.GetCategories(env.db, filter, &items)
 
+	// TODO: Hateoas
 	json.NewEncoder(w).Encode(items)
 }
 
@@ -45,9 +46,13 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	}
 
 	items := []manager.Category{}
-	manager.GetSubcategories(env.db, catId, page, &items)
+	filter := manager.Filter{
+		Skip:  page * env.maxItemsPerPage,
+		Limit: env.maxItemsPerPage,
+		Query: bson.M{"parentCategoryId": bson.ObjectIdHex(catId)},
+	}
+	manager.GetCategories(env.db, filter, &items)
 
-	// HATEOAS
 	json.NewEncoder(w).Encode(items)
 }
 

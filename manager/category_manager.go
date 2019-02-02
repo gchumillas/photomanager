@@ -22,23 +22,10 @@ const maxItemsPerPage = 3
 // TODO: add a filter?
 func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	if err := db.C("categories").
-		Find(nil).
+		Find(filter.Query).
 		Skip(filter.Skip).
 		Limit(filter.Limit).
 		All(items); err != nil {
-		log.Fatal(err)
-	}
-}
-
-// TODO: pagination
-// TODO: remove this function?
-func GetSubcategories(db *mgo.Database, catId string, page int, items *[]Category) {
-	skip := page * maxItemsPerPage
-	limit := maxItemsPerPage
-	cats := db.C("categories")
-	filter := bson.M{"parentCategoryId": bson.ObjectIdHex(catId)}
-
-	if err := cats.Find(filter).Skip(skip).Limit(limit).All(items); err != nil {
 		log.Fatal(err)
 	}
 }
