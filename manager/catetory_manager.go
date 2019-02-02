@@ -29,10 +29,13 @@ func GetCategories(db *mgo.Database, page int, items *[]Category) {
 }
 
 // TODO: pagination
-func GetSubcategories(db *mgo.Database, catId string, items *[]Category) {
+func GetSubcategories(db *mgo.Database, catId string, page int, items *[]Category) {
+	skip := page * maxItemsPerPage
+	limit := maxItemsPerPage
+	cats := db.C("categories")
 	filter := bson.M{"parentCategoryId": bson.ObjectIdHex(catId)}
 
-	if err := db.C("categories").Find(filter).All(items); err != nil {
+	if err := cats.Find(filter).Skip(skip).Limit(limit).All(items); err != nil {
 		log.Fatal(err)
 	}
 }

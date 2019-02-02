@@ -29,13 +29,19 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catId := params["id"]
 
+	page, err := strconv.Atoi(params["page"])
+	if err != nil {
+		httpError(w, badParamsError)
+		return
+	}
+
 	if !bson.IsObjectIdHex(catId) {
 		httpError(w, badParamsError)
 		return
 	}
 
 	items := []manager.Category{}
-	manager.GetSubcategories(env.db, catId, &items)
+	manager.GetSubcategories(env.db, catId, page, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
