@@ -26,7 +26,6 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	}
 	manager.GetCategories(env.db, filter, &items)
 
-	// TODO: Hateoas
 	json.NewEncoder(w).Encode(items)
 }
 
