@@ -19,10 +19,12 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	skip := page * env.maxItemsPerPage
-	limit := env.maxItemsPerPage
 	items := []manager.Category{}
-	manager.GetCategories(env.db, skip, limit, &items)
+	filter := manager.Filter{
+		Skip:  page * env.maxItemsPerPage,
+		Limit: env.maxItemsPerPage,
+	}
+	manager.GetCategories(env.db, filter, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
