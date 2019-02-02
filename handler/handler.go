@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/globalsign/mgo"
@@ -15,7 +16,7 @@ type httpStatus struct {
 // Common http errors.
 var (
 	payloadError     httpStatus = httpStatus{"The payload is not well formed.", 400}
-	docNotFoundError httpStatus = httpStatus{"The parameters are not valid.", 404}
+	docNotFoundError httpStatus = httpStatus{"Document not found.", 404}
 	badParamsError   httpStatus = httpStatus{"Bad parameters.", 400}
 )
 
@@ -37,8 +38,8 @@ func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {
 	}
 }
 
-// TODO: print log
 func httpError(w http.ResponseWriter, status httpStatus) {
 	http.Error(w, status.msg, status.code)
+	log.Printf("http error (%d): %s", status.code, status.msg)
 	return
 }
