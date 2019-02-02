@@ -39,7 +39,6 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	manager.GetCategories(env.db, filter, &items)
 
 	// Gets the number of pages.
-	// TODO: verify that page < numPages
 	numItems := manager.GetNumCategories(env.db, filter)
 	numPages := numItems / env.maxItemsPerPage
 	remainder := numItems % env.maxItemsPerPage
