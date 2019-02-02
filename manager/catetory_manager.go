@@ -13,9 +13,17 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
+// TODO: move to config file
+const maxItemsPerPage = 3
+
 // TODO: pagination
-func GetCategories(db *mgo.Database, items *[]Category) {
-	if err := db.C("categories").Find(nil).All(items); err != nil {
+// TODO: sorting
+func GetCategories(db *mgo.Database, page int, items *[]Category) {
+	skip := page * maxItemsPerPage
+	limit := maxItemsPerPage
+	cats := db.C("categories")
+
+	if err := cats.Find(nil).Skip(skip).Limit(limit).All(items); err != nil {
 		log.Fatal(err)
 	}
 }

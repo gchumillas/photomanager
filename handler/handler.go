@@ -36,6 +36,7 @@ func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {
 	}
 }
 
+// TODO: print log
 func httpError(w http.ResponseWriter, status httpStatus) {
 	http.Error(w, status.msg, status.code)
 	return

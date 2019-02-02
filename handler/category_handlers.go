@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo/bson"
@@ -10,8 +11,16 @@ import (
 )
 
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	page, err := strconv.Atoi(params["page"])
+	if err != nil {
+		httpError(w, badParamsError)
+		return
+	}
+
 	items := []manager.Category{}
-	manager.GetCategories(env.db, &items)
+	manager.GetCategories(env.db, page, &items)
 
 	json.NewEncoder(w).Encode(items)
 }
