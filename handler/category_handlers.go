@@ -80,13 +80,13 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	item := manager.Category{}
-	if found := manager.GetCategory(env.db, catID, &item); !found {
+	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
+	if found := cat.GetCategory(env.db); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(item)
+	json.NewEncoder(w).Encode(cat)
 }
 
 // InsertCategory inserts a category.

@@ -37,10 +37,8 @@ func GetNumCategories(db *mgo.Database, filter Filter) int {
 }
 
 // GetCategory return a category.
-func GetCategory(db *mgo.Database, catID string, item *Category) (found bool) {
-	id := bson.ObjectIdHex(catID)
-
-	if err := db.C("categories").FindId(id).One(item); err != nil {
+func (cat *Category) GetCategory(db *mgo.Database) (found bool) {
+	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
