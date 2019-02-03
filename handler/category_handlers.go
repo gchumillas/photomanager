@@ -66,15 +66,15 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 // GetCategory prints a specific category.
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	catId := params["id"]
+	catID := params["id"]
 
-	if !bson.IsObjectIdHex(catId) {
+	if !bson.IsObjectIdHex(catID) {
 		httpError(w, badParamsError)
 		return
 	}
 
 	item := manager.Category{}
-	if found := manager.GetCategory(env.db, catId, &item); !found {
+	if found := manager.GetCategory(env.db, catID, &item); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -99,9 +99,9 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 // UpdateCategory updates a category.
 func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	catId := params["id"]
+	catID := params["id"]
 
-	if !bson.IsObjectIdHex(catId) {
+	if !bson.IsObjectIdHex(catID) {
 		httpError(w, badParamsError)
 		return
 	}
@@ -112,11 +112,11 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
-		ID:       bson.ObjectIdHex(catId),
+		ID:       bson.ObjectIdHex(catID),
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	if found := manager.UpdateCategory(env.db, catId, cat); !found {
+	if found := manager.UpdateCategory(env.db, catID, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
