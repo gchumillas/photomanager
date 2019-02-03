@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// TODO: add json tags
 type config struct {
 	APIVersion      string
 	ServerAddr      string
