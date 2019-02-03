@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -11,19 +12,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// GetCategories gets all categories.
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	parentCatId := params["id"]
+	parentCatID := params["id"]
 	colsParam := params["columns"]
 
 	var query interface{}
-	if len(parentCatId) > 0 {
-		if !bson.IsObjectIdHex(parentCatId) {
+	if len(parentCatID) > 0 {
+		if !bson.IsObjectIdHex(parentCatID) {
 			httpError(w, badParamsError)
 			return
 		}
 
-		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatId)}
+		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 	}
 
 	var sortCols []string
@@ -32,10 +34,19 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		sortCols = strings.Split(colsParam, ",")
 	}
 
-	page, err := strconv.Atoi(params["page"])
-	if err != nil {
-		httpError(w, badParamsError)
-		return
+	// page := strconv.Atoi(getParam("page", "0"))
+
+	pageParam := r.FormValue("page")
+	page := 0
+	if len(pageParam) > 0 {
+		var err error
+		page, err = strconv.Atoi(pageParam)
+		if err != nil {
+			httpError(w, badParamsError)
+			return
+		}
+
+		log.Println(page)
 	}
 
 	items := []manager.Category{}

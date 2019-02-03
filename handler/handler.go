@@ -15,16 +15,18 @@ type httpStatus struct {
 
 // Common http errors.
 var (
-	payloadError     httpStatus = httpStatus{"The payload is not well formed.", 400}
-	docNotFoundError httpStatus = httpStatus{"Document not found.", 404}
-	badParamsError   httpStatus = httpStatus{"Bad parameters.", 400}
+	payloadError     = httpStatus{"The payload is not well formed.", 400}
+	docNotFoundError = httpStatus{"Document not found.", 404}
+	badParamsError   = httpStatus{"Bad parameters.", 400}
 )
 
+// Env contains environment variables.
 type Env struct {
 	db              *mgo.Database
 	maxItemsPerPage int
 }
 
+// NewEnv returns a pointer to a Env instance.
 func NewEnv(db *mgo.Database, maxItemsPerPage int) *Env {
 	return &Env{db, maxItemsPerPage}
 }
