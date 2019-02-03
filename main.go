@@ -53,8 +53,6 @@ func main() {
 	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DEL")
-	// TODO: remove this router
-	cats.HandleFunc("/{id}/subcategories/page/{page}", env.GetCategories).Methods("GET")
 	cats.Use(cType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)

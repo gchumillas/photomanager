@@ -13,9 +13,7 @@ import (
 
 // GetCategories prints all categories.
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	parentCatID := params["id"]
-
+	parentCatID := getParam(r, "parentCatId", "")
 	var query interface{}
 	if len(parentCatID) > 0 {
 		if !bson.IsObjectIdHex(parentCatID) {
