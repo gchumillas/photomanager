@@ -13,12 +13,12 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
-// TODO: sorting
 func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	if err := db.C("categories").
 		Find(filter.Query).
 		Skip(filter.Skip).
 		Limit(filter.Limit).
+		Sort(filter.SortCols...).
 		All(items); err != nil {
 		log.Fatal(err)
 	}

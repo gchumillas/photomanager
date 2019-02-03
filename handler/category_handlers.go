@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo/bson"
@@ -13,6 +14,7 @@ import (
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	parentCatId := params["id"]
+	colsParam := params["columns"]
 
 	var query interface{}
 	if len(parentCatId) > 0 {
@@ -24,6 +26,12 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatId)}
 	}
 
+	var sortCols []string
+	if len(colsParam) > 0 {
+		// TODO: check columns
+		sortCols = strings.Split(colsParam, ",")
+	}
+
 	page, err := strconv.Atoi(params["page"])
 	if err != nil {
 		httpError(w, badParamsError)
@@ -32,9 +40,10 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 	items := []manager.Category{}
 	filter := manager.Filter{
-		Skip:  page * env.maxItemsPerPage,
-		Limit: env.maxItemsPerPage,
-		Query: query,
+		Skip:     page * env.maxItemsPerPage,
+		Limit:    env.maxItemsPerPage,
+		Query:    query,
+		SortCols: sortCols,
 	}
 	manager.GetCategories(env.db, filter, &items)
 
