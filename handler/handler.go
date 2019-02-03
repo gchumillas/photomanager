@@ -53,3 +53,13 @@ func getParam(r *http.Request, key, def string) (param string) {
 
 	return
 }
+
+func inArray(item string, items []string) (found bool, index int) {
+	for index = range items {
+		if found = (items[index] == item); found {
+			return
+		}
+	}
+
+	return
+}

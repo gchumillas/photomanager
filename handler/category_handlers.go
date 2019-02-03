@@ -26,10 +26,19 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 	}
 
-	// TODO: check columns
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
+	for _, col := range sortCols {
+		str := col
+		if i := strings.IndexRune(col, '-'); i == 0 {
+			str = col[1:]
+		}
 
-	// page := strconv.Atoi(getParam("page", "0"))
+		if found, _ := inArray(str, []string{"name"}); !found {
+			httpError(w, badParamsError)
+			return
+		}
+	}
+
 	page, err := strconv.Atoi(getParam(r, "page", "0"))
 	if err != nil || page < 0 {
 		httpError(w, badParamsError)
