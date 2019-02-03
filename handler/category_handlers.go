@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// GetCategories gets all categories.
+// GetCategories prints all categories.
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	parentCatID := params["id"]
@@ -63,6 +63,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetCategory prints a specific category.
 func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catId := params["id"]
@@ -81,6 +82,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(item)
 }
 
+// InsertCategory inserts a category.
 func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
 		Name string
@@ -94,6 +96,7 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	manager.InsertCategory(env.db, cat)
 }
 
+// UpdateCategory updates a category.
 func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catId := params["id"]
@@ -119,5 +122,6 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteCategory deletes a category.
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 }

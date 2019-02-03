@@ -7,12 +7,14 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// Category entity.
 type Category struct {
 	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
 	Name     string          `json:"name"`
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
+// GetCategories returns a list of categories..
 func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	if err := db.C("categories").
 		Find(filter.Query).
@@ -24,6 +26,7 @@ func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	}
 }
 
+// GetNumCategories returns the number of categories.
 func GetNumCategories(db *mgo.Database, filter Filter) int {
 	count, err := db.C("categories").Find(filter.Query).Count()
 	if err != nil {
@@ -33,6 +36,7 @@ func GetNumCategories(db *mgo.Database, filter Filter) int {
 	return count
 }
 
+// GetCategory return a category.
 func GetCategory(db *mgo.Database, catId string, item *Category) (found bool) {
 	id := bson.ObjectIdHex(catId)
 
@@ -48,12 +52,14 @@ func GetCategory(db *mgo.Database, catId string, item *Category) (found bool) {
 	return true
 }
 
+// InsertCategory inserts a category.
 func InsertCategory(db *mgo.Database, item *Category) {
 	if err := db.C("categories").Insert(item); err != nil {
 		log.Fatal(err)
 	}
 }
 
+// UpdateCategory updates a category.
 func UpdateCategory(db *mgo.Database, catId string, item *Category) (found bool) {
 	id := bson.ObjectIdHex(catId)
 
