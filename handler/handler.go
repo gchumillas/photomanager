@@ -45,3 +45,11 @@ func httpError(w http.ResponseWriter, status httpStatus) {
 	log.Printf("http error (%d): %s", status.code, status.msg)
 	return
 }
+
+func getParam(r *http.Request, key, def string) (param string) {
+	if param = r.FormValue(key); len(param) == 0 {
+		param = def
+	}
+
+	return
+}

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -16,7 +15,6 @@ import (
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	parentCatID := params["id"]
-	colsParam := params["columns"]
 
 	var query interface{}
 	if len(parentCatID) > 0 {
@@ -28,25 +26,14 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 	}
 
-	var sortCols []string
-	if len(colsParam) > 0 {
-		// TODO: check columns
-		sortCols = strings.Split(colsParam, ",")
-	}
+	// TODO: check columns
+	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
 
 	// page := strconv.Atoi(getParam("page", "0"))
-
-	pageParam := r.FormValue("page")
-	page := 0
-	if len(pageParam) > 0 {
-		var err error
-		page, err = strconv.Atoi(pageParam)
-		if err != nil {
-			httpError(w, badParamsError)
-			return
-		}
-
-		log.Println(page)
+	page, err := strconv.Atoi(getParam(r, "page", "0"))
+	if err != nil || page < 0 {
+		httpError(w, badParamsError)
+		return
 	}
 
 	items := []manager.Category{}
