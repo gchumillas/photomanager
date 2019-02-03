@@ -14,15 +14,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// TODO: add json tags
 type config struct {
-	APIVersion      string
-	ServerAddr      string
-	MaxItemsPerPage int
-	MongoURI        string
-	MongoDB         string
-	MongoUser       string
-	MongoPass       string
+	APIVersion      string `json:"apiVersion"`
+	ServerAddr      string `json:"serverAddr"`
+	MaxItemsPerPage int    `json:"maxItemsPerPage"`
+	MongoURI        string `json:"mongoUri"`
+	MongoDB         string `json:"mongoDb"`
+	MongoUser       string `json:"mongoUser"`
+	MongoPass       string `json:"mongoPass"`
 }
 
 func main() {
