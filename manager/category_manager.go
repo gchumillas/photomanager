@@ -14,6 +14,41 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
+// CreateCategory inserts a category.
+func (cat *Category) CreateCategory(db *mgo.Database) {
+	if err := db.C("categories").Insert(cat); err != nil {
+		log.Fatal(err)
+	}
+}
+
+// ReadCategory return a category.
+func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
+	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
+		switch err {
+		case mgo.ErrNotFound:
+			return false
+		default:
+			log.Fatal(err)
+		}
+	}
+
+	return true
+}
+
+// UpdateCategory updates a category.
+func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
+	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
+		switch err {
+		case mgo.ErrNotFound:
+			return false
+		default:
+			log.Fatal(err)
+		}
+	}
+
+	return true
+}
+
 // GetCategories returns a list of categories..
 func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 	if err := db.C("categories").
@@ -34,40 +69,4 @@ func GetNumCategories(db *mgo.Database, filter Filter) int {
 	}
 
 	return count
-}
-
-// ReadCategory return a category.
-// TODO: rename by ReadCategory
-func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
-	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
-		switch err {
-		case mgo.ErrNotFound:
-			return false
-		default:
-			log.Fatal(err)
-		}
-	}
-
-	return true
-}
-
-// CreateCategory inserts a category.
-func (cat *Category) CreateCategory(db *mgo.Database) {
-	if err := db.C("categories").Insert(cat); err != nil {
-		log.Fatal(err)
-	}
-}
-
-// UpdateCategory updates a category.
-func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
-	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
-		switch err {
-		case mgo.ErrNotFound:
-			return false
-		default:
-			log.Fatal(err)
-		}
-	}
-
-	return true
 }
