@@ -98,9 +98,8 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
-		ID:       bson.NewObjectId(),
-		Name:     payload.Name,
-		ImageIDs: []bson.ObjectId{}, // TODO: remove?
+		ID:   bson.NewObjectId(),
+		Name: payload.Name,
 	}
 	cat.InsertCategory(env.db)
 
