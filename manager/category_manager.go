@@ -36,9 +36,9 @@ func GetNumCategories(db *mgo.Database, filter Filter) int {
 	return count
 }
 
-// GetCategory return a category.
+// ReadCategory return a category.
 // TODO: rename by ReadCategory
-func (cat *Category) GetCategory(db *mgo.Database) (found bool) {
+func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
 	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:

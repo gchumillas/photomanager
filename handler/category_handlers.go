@@ -71,8 +71,8 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GetCategory prints a specific category.
-func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
+// ReadCategory prints a specific category.
+func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
@@ -82,7 +82,7 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
-	if found := cat.GetCategory(env.db); !found {
+	if found := cat.ReadCategory(env.db); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
