@@ -51,9 +51,8 @@ func (cat *Category) GetCategory(db *mgo.Database) (found bool) {
 	return true
 }
 
-// InsertCategory inserts a category.
-// TODO: rename by CreateCategory
-func (cat *Category) InsertCategory(db *mgo.Database) {
+// CreateCategory inserts a category.
+func (cat *Category) CreateCategory(db *mgo.Database) {
 	if err := db.C("categories").Insert(cat); err != nil {
 		log.Fatal(err)
 	}

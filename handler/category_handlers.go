@@ -90,8 +90,8 @@ func (env *Env) GetCategory(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cat)
 }
 
-// InsertCategory inserts a category.
-func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
+// CreateCategory inserts a category.
+func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
 		Name string
 	}
@@ -101,7 +101,7 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 		ID:   bson.NewObjectId(),
 		Name: payload.Name,
 	}
-	cat.InsertCategory(env.db)
+	cat.CreateCategory(env.db)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"id": cat.ID,

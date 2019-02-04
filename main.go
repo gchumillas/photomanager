@@ -49,7 +49,7 @@ func main() {
 	// categories routes
 	cats := s.PathPrefix("/categories").Subrouter()
 	cats.HandleFunc("", env.GetCategories).Methods("GET")
-	cats.HandleFunc("", env.InsertCategory).Methods("POST")
+	cats.HandleFunc("", env.CreateCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.GetCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DEL")
