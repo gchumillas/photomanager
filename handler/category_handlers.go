@@ -98,10 +98,15 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
+		ID:       bson.NewObjectId(),
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{}, // TODO: remove?
 	}
 	cat.InsertCategory(env.db)
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"id": cat.ID,
+	})
 }
 
 // UpdateCategory updates a category.
