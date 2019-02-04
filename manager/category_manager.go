@@ -36,8 +36,7 @@ func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
 }
 
 // UpdateCategory updates a category.
-// TODO: found bool --> bool
-func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
+func (cat *Category) UpdateCategory(db *mgo.Database) bool {
 	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
