@@ -37,6 +37,7 @@ func GetNumCategories(db *mgo.Database, filter Filter) int {
 }
 
 // GetCategory return a category.
+// TODO: rename by ReadCategory
 func (cat *Category) GetCategory(db *mgo.Database) (found bool) {
 	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
 		switch err {
@@ -51,17 +52,17 @@ func (cat *Category) GetCategory(db *mgo.Database) (found bool) {
 }
 
 // InsertCategory inserts a category.
-func InsertCategory(db *mgo.Database, item *Category) {
-	if err := db.C("categories").Insert(item); err != nil {
+// TODO: rename by CreateCategory
+// TODO: must return the ID
+func (cat *Category) InsertCategory(db *mgo.Database) {
+	if err := db.C("categories").Insert(cat); err != nil {
 		log.Fatal(err)
 	}
 }
 
 // UpdateCategory updates a category.
-func UpdateCategory(db *mgo.Database, catID string, item *Category) (found bool) {
-	id := bson.ObjectIdHex(catID)
-
-	if err := db.C("categories").UpdateId(id, item); err != nil {
+func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
+	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false

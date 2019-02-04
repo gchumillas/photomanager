@@ -12,6 +12,7 @@ import (
 )
 
 // GetCategories prints all categories.
+// TODO: categories should belongs to a specific user
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	parentCatID := getParam(r, "parentCatId", "")
 	var query interface{}
@@ -98,9 +99,9 @@ func (env *Env) InsertCategory(w http.ResponseWriter, r *http.Request) {
 
 	cat := &manager.Category{
 		Name:     payload.Name,
-		ImageIDs: []bson.ObjectId{},
+		ImageIDs: []bson.ObjectId{}, // TODO: remove?
 	}
-	manager.InsertCategory(env.db, cat)
+	cat.InsertCategory(env.db)
 }
 
 // UpdateCategory updates a category.
@@ -123,7 +124,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	if found := manager.UpdateCategory(env.db, catID, cat); !found {
+	if found := cat.UpdateCategory(env.db); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
