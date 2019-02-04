@@ -36,8 +36,23 @@ func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
 }
 
 // UpdateCategory updates a category.
+// TODO: found bool --> bool
 func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
 	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
+		switch err {
+		case mgo.ErrNotFound:
+			return false
+		default:
+			log.Fatal(err)
+		}
+	}
+
+	return true
+}
+
+// DeleteCategory deletes a category.
+func (cat *Category) DeleteCategory(db *mgo.Database) bool {
+	if err := db.C("categories").RemoveId(cat.ID); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false

@@ -136,4 +136,19 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 
 // DeleteCategory deletes a category.
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	catID := params["id"]
+
+	if !bson.IsObjectIdHex(catID) {
+		httpError(w, badParamsError)
+		return
+	}
+
+	cat := &manager.Category{
+		ID: bson.ObjectIdHex(catID),
+	}
+	if found := cat.DeleteCategory(env.db); !found {
+		httpError(w, docNotFoundError)
+		return
+	}
 }

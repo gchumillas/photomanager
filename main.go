@@ -52,7 +52,7 @@ func main() {
 	cats.HandleFunc("", env.CreateCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
-	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DEL")
+	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
 	cats.Use(cType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
