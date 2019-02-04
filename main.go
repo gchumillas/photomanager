@@ -38,9 +38,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// middlewares
-	cType := middleware.NewContentType("application/json; charset=utf-8")
-
 	env := handler.NewEnv(db, conf.MaxItemsPerPage)
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
@@ -53,7 +50,10 @@ func main() {
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
-	cats.Use(cType.Middleware)
+
+	// middlewares
+	cType := middleware.NewContentType("application/json; charset=utf-8")
+	r.Use(cType.Middleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
