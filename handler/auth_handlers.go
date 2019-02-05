@@ -7,8 +7,10 @@ import (
 )
 
 // GetAuthURL gets the authentication URL.
-func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, redirectURI, appKey string) {
-	u, _ := url.Parse("https://www.dropbox.com/oauth2/authorize")
+func (env *Env) GetAuthURL(
+	w http.ResponseWriter, r *http.Request, authURL, redirectURI, appKey string,
+) {
+	u, _ := url.Parse(authURL)
 	q := u.Query()
 	q.Add("redirect_uri", redirectURI)
 	q.Add("client_id", appKey)
