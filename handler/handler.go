@@ -23,9 +23,7 @@ var (
 // Env contains environment variables.
 type Env struct {
 	DB              *mgo.Database
-	APIVersion      string
 	MaxItemsPerPage int
-	DropboxKey      string
 }
 
 func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {

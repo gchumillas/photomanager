@@ -42,9 +42,7 @@ func main() {
 
 	env := &handler.Env{
 		DB:              db,
-		APIVersion:      conf.APIVersion,
 		MaxItemsPerPage: conf.MaxItemsPerPage,
-		DropboxKey:      conf.DropboxKey,
 	}
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
