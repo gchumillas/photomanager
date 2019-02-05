@@ -22,13 +22,8 @@ var (
 
 // Env contains environment variables.
 type Env struct {
-	db              *mgo.Database
-	maxItemsPerPage int
-}
-
-// NewEnv returns a pointer to a Env instance.
-func NewEnv(db *mgo.Database, maxItemsPerPage int) *Env {
-	return &Env{db, maxItemsPerPage}
+	DB              *mgo.Database
+	MaxItemsPerPage int
 }
 
 func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {

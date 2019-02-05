@@ -46,17 +46,17 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 	items := []manager.Category{}
 	filter := manager.Filter{
-		Skip:     page * env.maxItemsPerPage,
-		Limit:    env.maxItemsPerPage,
+		Skip:     page * env.MaxItemsPerPage,
+		Limit:    env.MaxItemsPerPage,
 		Query:    query,
 		SortCols: sortCols,
 	}
-	manager.GetCategories(env.db, filter, &items)
+	manager.GetCategories(env.DB, filter, &items)
 
 	// Gets the number of pages.
-	numItems := manager.GetNumCategories(env.db, filter)
-	numPages := numItems / env.maxItemsPerPage
-	remainder := numItems % env.maxItemsPerPage
+	numItems := manager.GetNumCategories(env.DB, filter)
+	numPages := numItems / env.MaxItemsPerPage
+	remainder := numItems % env.MaxItemsPerPage
 	if remainder > 0 {
 		numPages++
 	}
@@ -66,7 +66,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		"page": map[string]interface{}{
 			"current":  page,
 			"total":    numPages,
-			"maxItems": env.maxItemsPerPage,
+			"maxItems": env.MaxItemsPerPage,
 		},
 	})
 }
@@ -82,7 +82,7 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
-	if found := cat.ReadCategory(env.db); !found {
+	if found := cat.ReadCategory(env.DB); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -101,7 +101,7 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 		ID:   bson.NewObjectId(),
 		Name: payload.Name,
 	}
-	cat.CreateCategory(env.db)
+	cat.CreateCategory(env.DB)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"id": cat.ID,
@@ -128,7 +128,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		Name:     payload.Name,
 		ImageIDs: []bson.ObjectId{},
 	}
-	if found := cat.UpdateCategory(env.db); !found {
+	if found := cat.UpdateCategory(env.DB); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -147,7 +147,7 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	cat := &manager.Category{
 		ID: bson.ObjectIdHex(catID),
 	}
-	if found := cat.DeleteCategory(env.db); !found {
+	if found := cat.DeleteCategory(env.DB); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
