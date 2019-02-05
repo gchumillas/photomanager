@@ -22,6 +22,7 @@ type config struct {
 	MongoDB         string `json:"mongoDb"`
 	MongoUser       string `json:"mongoUser"`
 	MongoPass       string `json:"mongoPass"`
+	DropboxKey      string `json:"dropboxKey"`
 }
 
 func main() {
@@ -40,7 +41,9 @@ func main() {
 
 	env := &handler.Env{
 		DB:              db,
+		APIVersion:      conf.APIVersion,
 		MaxItemsPerPage: conf.MaxItemsPerPage,
+		DropboxKey:      conf.DropboxKey,
 	}
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
@@ -53,6 +56,10 @@ func main() {
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
+
+	// authentication
+	auth := s.PathPrefix("/auth").Subrouter()
+	auth.HandleFunc("/url", env.GetAuthURL).Methods("GET")
 
 	// middlewares
 	cType := middleware.NewContentType("application/json; charset=utf-8")
