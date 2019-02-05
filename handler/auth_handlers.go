@@ -2,16 +2,18 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"net/url"
 )
 
 // GetAuthURL gets the authentication URL.
-func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request) {
-	url := fmt.Sprintf(
-		"https://www.dropbox.com/oauth2/authorize?redirect_uri=%s&client_id=%s&response_type=token",
-		"http://localhost:8080/v1/auth/login",
-		env.DropboxKey,
-	)
-	json.NewEncoder(w).Encode(url)
+func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, redirectURI, appKey string) {
+	u, _ := url.Parse("https://www.dropbox.com/oauth2/authorize")
+	q := u.Query()
+	q.Add("redirect_uri", redirectURI)
+	q.Add("client_id", appKey)
+	q.Add("response_type", "token")
+	u.RawQuery = q.Encode()
+
+	json.NewEncoder(w).Encode(u.String())
 }

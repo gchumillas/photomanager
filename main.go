@@ -15,14 +15,15 @@ import (
 )
 
 type config struct {
-	APIVersion      string `json:"apiVersion"`
-	ServerAddr      string `json:"serverAddr"`
-	MaxItemsPerPage int    `json:"maxItemsPerPage"`
-	MongoURI        string `json:"mongoUri"`
-	MongoDB         string `json:"mongoDb"`
-	MongoUser       string `json:"mongoUser"`
-	MongoPass       string `json:"mongoPass"`
-	DropboxKey      string `json:"dropboxKey"`
+	APIVersion         string `json:"apiVersion"`
+	ServerAddr         string `json:"serverAddr"`
+	MaxItemsPerPage    int    `json:"maxItemsPerPage"`
+	MongoURI           string `json:"mongoUri"`
+	MongoDB            string `json:"mongoDb"`
+	MongoUser          string `json:"mongoUser"`
+	MongoPass          string `json:"mongoPass"`
+	DropboxKey         string `json:"dropboxKey"`
+	DropboxRedirectURI string `json:"dropboxRedirectUri"`
 }
 
 func main() {
@@ -59,7 +60,9 @@ func main() {
 
 	// authentication
 	auth := s.PathPrefix("/auth").Subrouter()
-	auth.HandleFunc("/url", env.GetAuthURL).Methods("GET")
+	auth.HandleFunc("/url", func(w http.ResponseWriter, r *http.Request) {
+		env.GetAuthURL(w, r, conf.DropboxRedirectURI, conf.DropboxKey)
+	}).Methods("GET")
 
 	// middlewares
 	cType := middleware.NewContentType("application/json; charset=utf-8")
