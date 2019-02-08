@@ -36,6 +36,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/globalsign/mgo",
+    "github.com/globalsign/mgo/bson",
     "github.com/gorilla/mux",
   ]
   solver-name = "gps-cdcl"
