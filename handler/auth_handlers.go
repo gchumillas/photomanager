@@ -2,11 +2,17 @@ package handler
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
-const authURL = "https://www.dropbox.com/oauth2/authorize"
+const (
+	authURL  = "https://api.dropbox.com/oauth2/authorize"
+	tokenURL = "https://api.dropbox.com/oauth2/token"
+)
 
 // GetAuthURL gets the authentication URL.
 func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey string) {
@@ -24,4 +30,40 @@ func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey string
 	u.RawQuery = q.Encode()
 
 	json.NewEncoder(w).Encode(u.String())
+}
+
+func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret string) {
+	code := getParam(r, "code", "")
+	// TODO: setup dropbox redirectURI
+	redirectURI := getParam(r, "redirect_uri", "http://localhost:8080/v1/auth/login")
+
+	data := url.Values{}
+	data.Set("code", code)
+	data.Set("grant_type", "authorization_code")
+	data.Set("redirect_uri", redirectURI)
+	body := strings.NewReader(data.Encode())
+
+	req, err := http.NewRequest("POST", tokenURL, body)
+	// TODO: remove this
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.SetBasicAuth(appKey, appSecret)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	var target struct {
+		AccessToken string `json:"access_token"`
+	}
+	b, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(b, &target)
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": target.AccessToken,
+	})
 }
