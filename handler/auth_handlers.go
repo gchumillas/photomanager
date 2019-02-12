@@ -32,15 +32,14 @@ func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey string
 	json.NewEncoder(w).Encode(u.String())
 }
 
-func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret string) {
+func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret, redirectURI string) {
 	code := getParam(r, "code", "")
-	// TODO: setup dropbox redirectURI
-	redirectURI := getParam(r, "redirect_uri", "http://localhost:8080/v1/auth/login")
+	uri := getParam(r, "redirect_uri", redirectURI)
 
 	data := url.Values{}
 	data.Set("code", code)
 	data.Set("grant_type", "authorization_code")
-	data.Set("redirect_uri", redirectURI)
+	data.Set("redirect_uri", uri)
 	body := strings.NewReader(data.Encode())
 
 	req, _ := http.NewRequest("POST", tokenURL, body)
