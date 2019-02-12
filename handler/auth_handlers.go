@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -55,8 +54,7 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 	var target struct {
 		AccessToken string `json:"access_token"`
 	}
-	b, _ := ioutil.ReadAll(resp.Body)
-	json.Unmarshal(b, &target)
+	json.NewDecoder(resp.Body).Decode(&target)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"token": target.AccessToken,
