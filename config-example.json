@@ -6,5 +6,7 @@
   "mongoDb": "<dbname>",
   "mongoUser": "<username>",
   "mongoPass": "<password>",
-  "dropboxAppKey": "<app key>"
+  "dropboxAppKey": "<app key>",
+  "dropboxAppSecret": "<app secret>",
+  "dropboxRedirectUri": "http://localhost:8080/v1/auth/login"
 }
