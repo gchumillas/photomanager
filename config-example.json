@@ -1,8 +1,10 @@
 {
-  "APIVersion": "v1",
-  "ServerAddr": "localhost:8080",
-  "MaxItemsPerPage": 10,
-  "MongoDB": "<database name>",
-  "MongoUser": "<user name>",
-  "MongoPass": "<password>"
+  "apiVersion": "v1",
+  "serverAddr": "localhost:8080",
+  "maxItemsPerPage": 10,
+  "mongoUri": "mongodb://localhost:27017",
+  "mongoDb": "<dbname>",
+  "mongoUser": "<username>",
+  "mongoPass": "<password>",
+  "dropboxAppKey": "<app key>"
 }
