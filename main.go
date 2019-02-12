@@ -23,7 +23,7 @@ type config struct {
 	MongoUser          string `json:"mongoUser"`
 	MongoPass          string `json:"mongoPass"`
 	DropboxAuthURL     string `json:"dropboxAuthUrl"`
-	DropboxAPIKey      string `json:"dropboxApiKey"`
+	DropboxAppKey      string `json:"dropboxAppKey"`
 	DropboxRedirectURI string `json:"dropboxRedirectUri"`
 }
 
@@ -61,7 +61,7 @@ func main() {
 	auth := s.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/url", func(w http.ResponseWriter, r *http.Request) {
 		env.GetAuthURL(
-			w, r, conf.DropboxAuthURL, conf.DropboxRedirectURI, conf.DropboxAPIKey,
+			w, r, conf.DropboxAuthURL, conf.DropboxRedirectURI, conf.DropboxAppKey,
 		)
 	}).Methods("GET")
 
