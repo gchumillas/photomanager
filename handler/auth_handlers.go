@@ -43,11 +43,7 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret 
 	data.Set("redirect_uri", redirectURI)
 	body := strings.NewReader(data.Encode())
 
-	req, err := http.NewRequest("POST", tokenURL, body)
-	// TODO: remove this
-	if err != nil {
-		log.Fatal(err)
-	}
+	req, _ := http.NewRequest("POST", tokenURL, body)
 	req.SetBasicAuth(appKey, appSecret)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
