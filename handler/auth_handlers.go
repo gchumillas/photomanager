@@ -6,10 +6,10 @@ import (
 	"net/url"
 )
 
+const authURL = "https://www.dropbox.com/oauth2/authorize"
+
 // GetAuthURL gets the authentication URL.
-func (env *Env) GetAuthURL(
-	w http.ResponseWriter, r *http.Request, authURL, appKey string,
-) {
+func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey string) {
 	redirectURI := getParam(r, "redirect_uri", "")
 	if len(redirectURI) == 0 {
 		httpError(w, badParamsError)

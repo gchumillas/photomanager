@@ -14,7 +14,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// TODO: remove DropboxAuthURL
 type config struct {
 	APIVersion      string `json:"apiVersion"`
 	ServerAddr      string `json:"serverAddr"`
@@ -23,7 +22,6 @@ type config struct {
 	MongoDB         string `json:"mongoDb"`
 	MongoUser       string `json:"mongoUser"`
 	MongoPass       string `json:"mongoPass"`
-	DropboxAuthURL  string `json:"dropboxAuthUrl"`
 	DropboxAppKey   string `json:"dropboxAppKey"`
 }
 
@@ -60,7 +58,7 @@ func main() {
 	// authentication
 	auth := s.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/url", func(w http.ResponseWriter, r *http.Request) {
-		env.GetAuthURL(w, r, conf.DropboxAuthURL, conf.DropboxAppKey)
+		env.GetAuthURL(w, r, conf.DropboxAppKey)
 	}).Methods("GET")
 
 	// middlewares
