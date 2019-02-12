@@ -14,7 +14,7 @@ func (env *Env) GetAuthURL(
 	q := u.Query()
 	q.Add("redirect_uri", redirectURI)
 	q.Add("client_id", appKey)
-	q.Add("response_type", "token")
+	q.Add("response_type", "code")
 	u.RawQuery = q.Encode()
 
 	json.NewEncoder(w).Encode(u.String())
