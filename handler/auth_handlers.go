@@ -55,6 +55,11 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode >= 400 {
+		httpError(w, badParamsError)
+		return
+	}
+
 	var target struct {
 		AccessToken string `json:"access_token"`
 	}
