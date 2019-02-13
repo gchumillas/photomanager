@@ -60,7 +60,7 @@ func main() {
 	// authentication
 	auth := s.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/url", func(w http.ResponseWriter, r *http.Request) {
-		env.GetAuthURL(w, r, conf.DropboxAppKey)
+		env.GetAuthURL(w, r, conf.DropboxAppKey, conf.DropboxRedirectURI)
 	}).Methods("GET")
 	auth.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		env.Login(w, r, conf.DropboxAppKey, conf.DropboxAppSecret, conf.DropboxRedirectURI)
