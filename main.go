@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gchumillas/photomanager/handler"
-	"github.com/gchumillas/photomanager/middleware"
 	"github.com/globalsign/mgo"
 	"github.com/gorilla/mux"
 )
@@ -66,9 +65,7 @@ func main() {
 		env.Login(w, r, conf.DropboxAppKey, conf.DropboxAppSecret, conf.DropboxRedirectURI)
 	})
 
-	// middlewares
-	cType := middleware.NewContentType("application/json; charset=utf-8")
-	r.Use(cType.Middleware)
+	r.Use(handler.JSONMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
