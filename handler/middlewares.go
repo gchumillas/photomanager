@@ -2,7 +2,7 @@ package handler
 
 import "net/http"
 
-// Middleware returns a middleware handler.
+// JSONMiddleware returns a middleware handler.
 func JSONMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
