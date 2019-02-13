@@ -34,6 +34,10 @@ func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey string
 func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret, redirectURI string) {
 	code := getParam(r, "code", "")
 	uri := getParam(r, "redirect_uri", redirectURI)
+	if len(code) == 0 || len(uri) == 0 {
+		httpError(w, badParamsError)
+		return
+	}
 
 	data := url.Values{}
 	data.Set("code", code)
