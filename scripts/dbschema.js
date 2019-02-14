@@ -10,6 +10,7 @@
 // load('dbschema.js')
 
 print('Create images collection');
+db.images.drop();
 db.createCollection(
   'images',
   {
@@ -30,16 +31,20 @@ db.createCollection(
 );
 
 print('Create categories collection');
+db.categories.drop();
 db.createCollection(
   'categories',
   {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'imageIds'],
+        required: ['name', 'userId', 'imageIds'],
         properties: {
           name: {
             bsonType: 'string'
+          },
+          userId: {
+            bsonType: 'objectId'
           },
           imageIds: {
             bsonType: 'array',
@@ -59,22 +64,20 @@ db.createCollection(
 );
 
 print('Create users collection');
+db.users.drop();
 db.createCollection(
   'users',
   {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name'],
+        required: ['accountId', 'accessToken'],
         properties: {
-          name: {
+          accountId: {
             bsonType: 'string'
           },
-          categoryIds: {
-            bsonType: 'array',
-            items: {
-              bsonType: 'objectId'
-            }
+          accessToken: {
+            bsonType: 'string'
           }
         }
       }
