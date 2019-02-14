@@ -8,10 +8,15 @@ import (
 	"github.com/globalsign/mgo"
 )
 
+// Context key.
+type contextKey string
+
 type httpStatus struct {
 	msg  string
 	code int
 }
+
+var contextAuthUser = contextKey("auth-user")
 
 // Common http errors.
 var (

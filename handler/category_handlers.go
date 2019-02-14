@@ -12,17 +12,22 @@ import (
 )
 
 // GetCategories prints all categories.
-// TODO: categories should belongs to a specific user
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
+	// TODO: getAuthUser(r)
+	u := r.Context().Value(contextAuthUser).(*manager.User)
+
 	parentCatID := getParam(r, "parentCatId", "")
-	var query interface{}
+	query := bson.M{
+		"userId":           u.ID,
+		"parentCategoryId": nil,
+	}
 	if len(parentCatID) > 0 {
 		if !bson.IsObjectIdHex(parentCatID) {
 			httpError(w, badParamsError)
 			return
 		}
 
-		query = bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
+		query["parentCategoryId"] = bson.ObjectIdHex(parentCatID)
 	}
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")

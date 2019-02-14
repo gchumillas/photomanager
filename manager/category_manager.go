@@ -7,6 +7,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// TODO: move to manager.go
 // Category entity.
 type Category struct {
 	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`

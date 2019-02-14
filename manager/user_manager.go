@@ -7,6 +7,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// TODO: move to manager.go
 // User entity.
 type User struct {
 	ID          bson.ObjectId   `json:"id" bson:"_id,omitempty"`
@@ -22,9 +23,25 @@ func (user *User) CreateUser(db *mgo.Database) {
 	}
 }
 
-// ReadUserByAccountID searches a user by Dropbox ID.
+// ReadUserByAccountID searches a user by account ID.
 func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
 	filter := bson.M{"accountId": user.AccountID}
+
+	if err := db.C("users").Find(filter).One(user); err != nil {
+		switch err {
+		case mgo.ErrNotFound:
+			return false
+		default:
+			log.Fatal(err)
+		}
+	}
+
+	return true
+}
+
+// ReadUserByAccountID searches a user by access token.
+func (user *User) ReadUserByToken(db *mgo.Database) (found bool) {
+	filter := bson.M{"accessToken": user.AccessToken}
 
 	if err := db.C("users").Find(filter).One(user); err != nil {
 		switch err {
