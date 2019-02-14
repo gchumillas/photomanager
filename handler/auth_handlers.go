@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/gchumillas/photomanager/manager"
 )
 
 const (
@@ -62,8 +64,18 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 
 	var target struct {
 		AccessToken string `json:"access_token"`
+		AccountID   string `json:"account_id"`
 	}
 	json.NewDecoder(resp.Body).Decode(&target)
+
+	u := &manager.User{AccountID: target.AccountID}
+	if found := u.ReadUserByAccountID(env.DB); !found {
+		u.AccessToken = target.AccessToken
+		u.CreateUser(env.DB)
+	} else {
+		u.AccessToken = target.AccessToken
+		u.UpdateUser(env.DB)
+	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"token": target.AccessToken,
