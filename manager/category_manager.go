@@ -4,16 +4,7 @@ import (
 	"log"
 
 	"github.com/globalsign/mgo"
-	"github.com/globalsign/mgo/bson"
 )
-
-// TODO: move to manager.go
-// Category entity.
-type Category struct {
-	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
-	Name     string          `json:"name"`
-	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
-}
 
 // CreateCategory inserts a category.
 func (cat *Category) CreateCategory(db *mgo.Database) {
