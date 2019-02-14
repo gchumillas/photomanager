@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo"
 )
 
@@ -30,6 +31,10 @@ var (
 type Env struct {
 	DB              *mgo.Database
 	MaxItemsPerPage int
+}
+
+func getAuthUser(r *http.Request) *manager.User {
+	return r.Context().Value(contextAuthUser).(*manager.User)
 }
 
 func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {

@@ -13,8 +13,7 @@ import (
 
 // GetCategories prints all categories.
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
-	// TODO: getAuthUser(r)
-	u := r.Context().Value(contextAuthUser).(*manager.User)
+	u := getAuthUser(r)
 
 	parentCatID := getParam(r, "parentCatId", "")
 	query := bson.M{
