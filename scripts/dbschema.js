@@ -9,17 +9,20 @@
 // use <database name>
 // load('dbschema.js')
 
-print('Create images collection');
-db.images.drop();
+print('Create users collection');
+db.users.drop();
 db.createCollection(
-  'images',
+  'users',
   {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['path'],
+        required: ['accountId', 'accessToken'],
         properties: {
-          path: {
+          accountId: {
+            bsonType: 'string'
+          },
+          accessToken: {
             bsonType: 'string'
           }
         }
@@ -63,20 +66,17 @@ db.createCollection(
   }
 );
 
-print('Create users collection');
-db.users.drop();
+print('Create images collection');
+db.images.drop();
 db.createCollection(
-  'users',
+  'images',
   {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['accountId', 'accessToken'],
+        required: ['path'],
         properties: {
-          accountId: {
-            bsonType: 'string'
-          },
-          accessToken: {
+          path: {
             bsonType: 'string'
           }
         }
