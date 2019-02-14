@@ -78,6 +78,7 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
+		"uid":   target.AccountID,
 		"token": target.AccessToken,
 	})
 }
