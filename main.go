@@ -55,6 +55,7 @@ func main() {
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
+	cats.Use(handler.AuthMiddleware)
 
 	// authentication
 	auth := s.PathPrefix("/auth").Subrouter()

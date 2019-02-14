@@ -15,9 +15,10 @@ type httpStatus struct {
 
 // Common http errors.
 var (
-	payloadError     = httpStatus{"The payload is not well formed.", 400}
-	docNotFoundError = httpStatus{"Document not found.", 404}
-	badParamsError   = httpStatus{"Bad parameters.", 400}
+	payloadError      = httpStatus{"The payload is not well formed.", 400}
+	docNotFoundError  = httpStatus{"Document not found.", 404}
+	badParamsError    = httpStatus{"Bad parameters.", 400}
+	unauthorizedError = httpStatus{"Not authorized.", 401}
 )
 
 // Env contains environment variables.
