@@ -38,6 +38,7 @@ func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
 	return true
 }
 
+// UpdateUser updates a user.
 func (user *User) UpdateUser(db *mgo.Database) (found bool) {
 	if err := db.C("users").UpdateId(user.ID, user); err != nil {
 		switch err {
