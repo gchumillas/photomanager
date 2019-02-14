@@ -33,7 +33,7 @@ type Env struct {
 	MaxItemsPerPage int
 }
 
-func getAuthUser(r *http.Request) *manager.User {
+func getAuthUser(r *http.Request) {
 	return r.Context().Value(contextAuthUser).(*manager.User)
 }
 
