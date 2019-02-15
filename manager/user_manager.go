@@ -16,9 +16,9 @@ func (user *User) CreateUser(db *mgo.Database) {
 
 // ReadUserByAccountID searches a user by account ID.
 func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
-	filter := bson.M{"accountId": user.AccountID}
+	query := bson.M{"accountId": user.AccountID}
 
-	if err := db.C("users").Find(filter).One(user); err != nil {
+	if err := db.C("users").Find(query).One(user); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
@@ -32,9 +32,9 @@ func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
 
 // ReadUserByAccountID searches a user by access token.
 func (user *User) ReadUserByToken(db *mgo.Database) (found bool) {
-	filter := bson.M{"accessToken": user.AccessToken}
+	query := bson.M{"accessToken": user.AccessToken}
 
-	if err := db.C("users").Find(filter).One(user); err != nil {
+	if err := db.C("users").Find(query).One(user); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
