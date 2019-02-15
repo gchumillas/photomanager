@@ -10,7 +10,7 @@
 // load('dbschema.js')
 
 print('Create users collection');
-db.users.drop();
+db.getCollection('users').drop();
 db.createCollection(
   'users',
   {
@@ -34,7 +34,7 @@ db.createCollection(
 );
 
 print('Create categories collection');
-db.categories.drop();
+db.getCollection('categories').drop();
 db.createCollection(
   'categories',
   {
@@ -67,7 +67,7 @@ db.createCollection(
 );
 
 print('Create images collection');
-db.images.drop();
+db.getCollection('images').drop();
 db.createCollection(
   'images',
   {
