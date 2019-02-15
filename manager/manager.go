@@ -19,7 +19,7 @@ type Category struct {
 
 // QueryOptions options.
 type QueryOptions struct {
-	Skip     int
-	Limit    int
-	SortCols []string
+	Skip  int
+	Limit int
+	Sort  []string
 }

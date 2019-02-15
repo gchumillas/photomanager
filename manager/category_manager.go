@@ -66,7 +66,7 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[
 		Find(query).
 		Skip(options.Skip).
 		Limit(options.Limit).
-		Sort(options.SortCols...).
+		Sort(options.Sort...).
 		All(items); err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, paren
 		Find(query).
 		Skip(options.Skip).
 		Limit(options.Limit).
-		Sort(options.SortCols...).
+		Sort(options.Sort...).
 		All(items); err != nil {
 		log.Fatal(err)
 	}

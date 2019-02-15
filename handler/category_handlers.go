@@ -36,9 +36,9 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 	items := []manager.Category{}
 	options := manager.QueryOptions{
-		Skip:     page * env.MaxItemsPerPage,
-		Limit:    env.MaxItemsPerPage,
-		SortCols: sortCols,
+		Skip:  page * env.MaxItemsPerPage,
+		Limit: env.MaxItemsPerPage,
+		Sort:  sortCols,
 	}
 	u.GetCategories(env.DB, options, &items)
 
@@ -87,9 +87,9 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	items := []manager.Category{}
 	options := manager.QueryOptions{
-		Skip:     page * env.MaxItemsPerPage,
-		Limit:    env.MaxItemsPerPage,
-		SortCols: sortCols,
+		Skip:  page * env.MaxItemsPerPage,
+		Limit: env.MaxItemsPerPage,
+		Sort:  sortCols,
 	}
 	u.GetSubcategories(env.DB, options, parentCatID, &items)
 
