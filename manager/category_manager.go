@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 )
 
 // CreateCategory inserts a category.
@@ -56,9 +57,13 @@ func (cat *Category) DeleteCategory(db *mgo.Database) (found bool) {
 }
 
 // GetCategories returns a list of categories..
-func GetCategories(db *mgo.Database, options QueryOptions, items *[]Category) {
+func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[]Category) {
+	query := bson.M{
+		"parentCategoryId": nil,
+	}
+
 	if err := db.C("categories").
-		Find(options.Query).
+		Find(query).
 		Skip(options.Skip).
 		Limit(options.Limit).
 		Sort(options.SortCols...).
@@ -68,8 +73,12 @@ func GetCategories(db *mgo.Database, options QueryOptions, items *[]Category) {
 }
 
 // GetNumCategories returns the number of categories.
-func GetNumCategories(db *mgo.Database, options QueryOptions) int {
-	count, err := db.C("categories").Find(options.Query).Count()
+func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
+	query := bson.M{
+		"parentCategoryId": nil,
+	}
+
+	count, err := db.C("categories").Find(query).Count()
 	if err != nil {
 		log.Fatal(err)
 	}

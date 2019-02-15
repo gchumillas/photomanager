@@ -15,20 +15,6 @@ import (
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
-	parentCatID := getParam(r, "parentCatId", "")
-	query := bson.M{
-		"userId":           u.ID,
-		"parentCategoryId": nil,
-	}
-	if len(parentCatID) > 0 {
-		if !bson.IsObjectIdHex(parentCatID) {
-			httpError(w, badParamsError)
-			return
-		}
-
-		query["parentCategoryId"] = bson.ObjectIdHex(parentCatID)
-	}
-
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
 	for _, col := range sortCols {
 		str := col
@@ -52,19 +38,19 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	options := manager.QueryOptions{
 		Skip:     page * env.MaxItemsPerPage,
 		Limit:    env.MaxItemsPerPage,
-		Query:    query,
 		SortCols: sortCols,
 	}
-	manager.GetCategories(env.DB, options, &items)
+	u.GetCategories(env.DB, options, &items)
 
 	// Gets the number of pages.
-	numItems := manager.GetNumCategories(env.DB, options)
+	numItems := u.GetNumCategories(env.DB, options)
 	numPages := numItems / env.MaxItemsPerPage
 	remainder := numItems % env.MaxItemsPerPage
 	if remainder > 0 {
 		numPages++
 	}
 
+	// TODO: change "page" by "numPages"
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"items": items,
 		"page": map[string]interface{}{

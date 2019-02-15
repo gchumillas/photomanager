@@ -21,6 +21,5 @@ type Category struct {
 type QueryOptions struct {
 	Skip     int
 	Limit    int
-	Query    interface{}
 	SortCols []string
 }
