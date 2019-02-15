@@ -64,6 +64,7 @@ func main() {
 	cats.HandleFunc("", env.GetCategories).Methods("GET")
 	cats.HandleFunc("", env.CreateCategory).Methods("POST")
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
+	cats.HandleFunc("/{id}/categories", env.GetSubcategories).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
 	cats.Use(env.AuthMiddleware)

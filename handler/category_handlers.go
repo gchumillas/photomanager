@@ -50,6 +50,62 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		numPages++
 	}
 
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"items": items,
+		"page": map[string]interface{}{
+			"current":  page,
+			"total":    numPages,
+			"maxItems": env.MaxItemsPerPage,
+		},
+	})
+}
+
+// GetSubcategories prints all subcategories.
+func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+	params := mux.Vars(r)
+	parentCatID := params["id"]
+
+	if !bson.IsObjectIdHex(parentCatID) {
+		httpError(w, badParamsError)
+		return
+	}
+
+	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
+	for _, col := range sortCols {
+		str := col
+		if i := strings.IndexRune(col, '-'); i == 0 {
+			str = col[1:]
+		}
+
+		if found, _ := inArray(str, []string{"name"}); !found {
+			httpError(w, badParamsError)
+			return
+		}
+	}
+
+	page, err := strconv.Atoi(getParam(r, "page", "0"))
+	if err != nil || page < 0 {
+		httpError(w, badParamsError)
+		return
+	}
+
+	items := []manager.Category{}
+	options := manager.QueryOptions{
+		Skip:     page * env.MaxItemsPerPage,
+		Limit:    env.MaxItemsPerPage,
+		SortCols: sortCols,
+	}
+	u.GetSubcategories(env.DB, options, parentCatID, &items)
+
+	// Gets the number of pages.
+	numItems := u.GetNumSubcategories(env.DB, options, parentCatID)
+	numPages := numItems / env.MaxItemsPerPage
+	remainder := numItems % env.MaxItemsPerPage
+	if remainder > 0 {
+		numPages++
+	}
+
 	// TODO: change "page" by "numPages"
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"items": items,

@@ -72,10 +72,40 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[
 	}
 }
 
+// GetSubategories returns a list of categories..
+func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
+	query := bson.M{
+		"parentCategoryId": bson.ObjectIdHex(parentCatID),
+	}
+
+	if err := db.C("categories").
+		Find(query).
+		Skip(options.Skip).
+		Limit(options.Limit).
+		Sort(options.SortCols...).
+		All(items); err != nil {
+		log.Fatal(err)
+	}
+}
+
 // GetNumCategories returns the number of categories.
 func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
 	query := bson.M{
 		"parentCategoryId": nil,
+	}
+
+	count, err := db.C("categories").Find(query).Count()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return count
+}
+
+// GetNumCategories returns the number of categories.
+func (user *User) GetNumSubcategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
+	query := bson.M{
+		"parentCategoryId": bson.ObjectIdHex(parentCatID),
 	}
 
 	count, err := db.C("categories").Find(query).Count()
