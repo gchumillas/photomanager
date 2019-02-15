@@ -1,5 +1,6 @@
 package handler
 
+// TODO: remove bson library
 import (
 	"encoding/json"
 	"net/http"
