@@ -17,16 +17,9 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
-	for _, col := range sortCols {
-		str := col
-		if i := strings.IndexRune(col, '-'); i == 0 {
-			str = col[1:]
-		}
-
-		if found, _ := inArray(str, []string{"name"}); !found {
-			httpError(w, badParamsError)
-			return
-		}
+	if !colsInArray(sortCols, "name") {
+		httpError(w, badParamsError)
+		return
 	}
 
 	page, err := strconv.Atoi(getParam(r, "page", "0"))
@@ -68,16 +61,9 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	parentCatID := params["id"]
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
-	for _, col := range sortCols {
-		str := col
-		if i := strings.IndexRune(col, '-'); i == 0 {
-			str = col[1:]
-		}
-
-		if found, _ := inArray(str, []string{"name"}); !found {
-			httpError(w, badParamsError)
-			return
-		}
+	if !colsInArray(sortCols, "name") {
+		httpError(w, badParamsError)
+		return
 	}
 
 	page, err := strconv.Atoi(getParam(r, "page", "0"))

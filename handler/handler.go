@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo"
@@ -68,4 +69,19 @@ func inArray(item string, items []string) (found bool, index int) {
 	}
 
 	return
+}
+
+func colsInArray(cols []string, items ...string) bool {
+	for _, col := range cols {
+		str := col
+		if i := strings.IndexRune(col, '-'); i == 0 {
+			str = col[1:]
+		}
+
+		if found, _ := inArray(str, items); !found {
+			return false
+		}
+	}
+
+	return true
 }
