@@ -45,12 +45,8 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"items": items,
-		"page": map[string]interface{}{
-			"current":  page,
-			"total":    numPages,
-			"maxItems": env.MaxItemsPerPage,
-		},
+		"items":    items,
+		"numPages": numPages,
 	})
 }
 
@@ -90,12 +86,8 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: change "page" by "numPages"
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"items": items,
-		"page": map[string]interface{}{
-			"current":  page,
-			"total":    numPages,
-			"maxItems": env.MaxItemsPerPage,
-		},
+		"items":    items,
+		"numPages": numPages,
 	})
 }
 
