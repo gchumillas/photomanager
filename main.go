@@ -11,6 +11,7 @@ import (
 
 	"github.com/gchumillas/photomanager/handler"
 	"github.com/globalsign/mgo"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -70,7 +71,7 @@ func main() {
 	cats.Use(env.AuthMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
-	log.Fatal(http.ListenAndServe(conf.ServerAddr, r))
+	log.Fatal(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
 }
 
 func loadConfig(filename string) (conf config) {
