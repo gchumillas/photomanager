@@ -66,11 +66,6 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	parentCatID := params["id"]
 
-	if !bson.IsObjectIdHex(parentCatID) {
-		httpError(w, badParamsError)
-		return
-	}
-
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
 	for _, col := range sortCols {
 		str := col
@@ -122,11 +117,7 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	if !bson.IsObjectIdHex(catID) {
-		httpError(w, badParamsError)
-		return
-	}
-
+	// TODO: use manager.NewCategory(catID)
 	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
 	if found := cat.ReadCategory(env.DB); !found {
 		httpError(w, docNotFoundError)
@@ -159,11 +150,6 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	if !bson.IsObjectIdHex(catID) {
-		httpError(w, badParamsError)
-		return
-	}
-
 	var payload struct {
 		Name string
 	}
@@ -184,11 +170,6 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
-
-	if !bson.IsObjectIdHex(catID) {
-		httpError(w, badParamsError)
-		return
-	}
 
 	cat := &manager.Category{
 		ID: bson.ObjectIdHex(catID),
