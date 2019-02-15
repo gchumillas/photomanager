@@ -49,7 +49,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	}
 
 	items := []manager.Category{}
-	filter := manager.Filter{
+	filter := manager.QueryOptions{
 		Skip:     page * env.MaxItemsPerPage,
 		Limit:    env.MaxItemsPerPage,
 		Query:    query,

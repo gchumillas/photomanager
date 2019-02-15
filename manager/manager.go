@@ -17,8 +17,8 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
-// Filter query.
-type Filter struct {
+// QueryOptions options.
+type QueryOptions struct {
 	Skip     int
 	Limit    int
 	Query    interface{}

@@ -56,7 +56,7 @@ func (cat *Category) DeleteCategory(db *mgo.Database) (found bool) {
 }
 
 // GetCategories returns a list of categories..
-func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
+func GetCategories(db *mgo.Database, filter QueryOptions, items *[]Category) {
 	if err := db.C("categories").
 		Find(filter.Query).
 		Skip(filter.Skip).
@@ -68,7 +68,7 @@ func GetCategories(db *mgo.Database, filter Filter, items *[]Category) {
 }
 
 // GetNumCategories returns the number of categories.
-func GetNumCategories(db *mgo.Database, filter Filter) int {
+func GetNumCategories(db *mgo.Database, filter QueryOptions) int {
 	count, err := db.C("categories").Find(filter.Query).Count()
 	if err != nil {
 		log.Fatal(err)
