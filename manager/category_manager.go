@@ -62,22 +62,7 @@ func (user *User) DeleteCategory(db *mgo.Database, catID string) (found bool) {
 }
 
 // GetCategories returns a list of categories..
-func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[]Category) {
-	query := bson.M{"parentCategoryId": nil}
-
-	if err := db.C("categories").
-		Find(query).
-		Skip(options.Skip).
-		Limit(options.Limit).
-		Sort(options.Sort...).
-		All(items); err != nil {
-		log.Fatal(err)
-	}
-}
-
-// TODO: remove this function
-// GetSubategories returns a list of categories..
-func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
+func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
 	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 
 	if err := db.C("categories").
@@ -91,20 +76,7 @@ func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, paren
 }
 
 // GetNumCategories returns the number of categories.
-func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
-	query := bson.M{"parentCategoryId": nil}
-
-	count, err := db.C("categories").Find(query).Count()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return count
-}
-
-// TODO: remove this function
-// GetNumCategories returns the number of categories.
-func (user *User) GetNumSubcategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
+func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
 	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 
 	count, err := db.C("categories").Find(query).Count()
