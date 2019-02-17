@@ -69,7 +69,6 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	catID := params["id"]
 
 	cat := &manager.Category{}
-	// TODO: replace this by if !u.ReadCategory {...}
 	if !u.ReadCategory(env.DB, catID, cat) {
 		httpError(w, docNotFoundError)
 		return
