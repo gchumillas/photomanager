@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"reflect"
+	"strings"
 
 	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo"
@@ -43,6 +45,19 @@ func parsePayload(w http.ResponseWriter, r *http.Request, payload interface{}) {
 	if err := dec.Decode(payload); err != nil {
 		httpError(w, payloadError)
 		return
+	}
+
+	// Removes whitespaces around texts.
+	elem := reflect.ValueOf(payload).Elem()
+	switch reflect.TypeOf(elem).Kind() {
+	case reflect.Struct:
+		count := elem.NumField()
+		for i := 0; i < count; i++ {
+			field := elem.Field(i)
+			if field.Type().Kind() == reflect.String {
+				field.SetString(strings.Trim(field.String(), " "))
+			}
+		}
 	}
 }
 
