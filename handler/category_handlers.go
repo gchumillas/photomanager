@@ -69,8 +69,8 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	cat := &manager.Category{}
-	if !cat.ReadCategory(env.DB, u, catID) {
+	cat := manager.NewCategory(catID)
+	if !cat.ReadCategory(env.DB, u) {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -85,7 +85,8 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
 
-	cat := &manager.Category{Name: payload.Name}
+	cat := manager.NewCategory()
+	cat.Name = payload.Name
 	cat.CreateCategory(env.DB, u)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{"id": cat.ID})
@@ -102,8 +103,9 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
 
-	cat := &manager.Category{Name: payload.Name}
-	if !cat.UpdateCategory(env.DB, u, catID) {
+	cat := manager.NewCategory(catID)
+	cat.Name = payload.Name
+	if !cat.UpdateCategory(env.DB, u) {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -116,8 +118,8 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	cat := &manager.Category{}
-	if !cat.DeleteCategory(env.DB, u, catID) {
+	cat := manager.NewCategory(catID)
+	if !cat.DeleteCategory(env.DB, u) {
 		httpError(w, docNotFoundError)
 		return
 	}

@@ -7,6 +7,15 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+func NewCategory(catID ...string) *Category {
+	var id bson.ObjectId
+	if len(catID) > 0 {
+		id = bson.ObjectIdHex(catID[0])
+	}
+
+	return &Category{ID: id}
+}
+
 func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	cat.ID = bson.NewObjectId()
 	cat.UserID = user.ID
@@ -16,8 +25,8 @@ func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	}
 }
 
-func (cat *Category) ReadCategory(db *mgo.Database, user *User, catID string) (found bool) {
-	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
+func (cat *Category) ReadCategory(db *mgo.Database, user *User) (found bool) {
+	query := bson.M{"_id": cat.ID, "userId": user.ID}
 
 	if err := db.C("categories").Find(query).One(cat); err != nil {
 		switch err {
@@ -31,9 +40,8 @@ func (cat *Category) ReadCategory(db *mgo.Database, user *User, catID string) (f
 	return true
 }
 
-func (cat *Category) UpdateCategory(db *mgo.Database, user *User, catID string) (found bool) {
-	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
-	cat.ID = bson.ObjectIdHex(catID)
+func (cat *Category) UpdateCategory(db *mgo.Database, user *User) (found bool) {
+	query := bson.M{"_id": cat.ID, "userId": user.ID}
 	cat.UserID = user.ID
 
 	if err := db.C("categories").Update(query, cat); err != nil {
@@ -48,9 +56,8 @@ func (cat *Category) UpdateCategory(db *mgo.Database, user *User, catID string) 
 	return true
 }
 
-// TODO: we do not need cat
-func (cat *Category) DeleteCategory(db *mgo.Database, user *User, catID string) (found bool) {
-	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
+func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
+	query := bson.M{"_id": cat.ID, "userId": user.ID}
 
 	if err := db.C("categories").Remove(query); err != nil {
 		switch err {
@@ -64,6 +71,8 @@ func (cat *Category) DeleteCategory(db *mgo.Database, user *User, catID string) 
 	return true
 }
 
+// TODO: move this function to user_manager.go
+// TODO: remove the items argument
 // GetCategories returns a list of categories..
 func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
 	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
@@ -78,6 +87,7 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCa
 	}
 }
 
+// TODO: move this function to user_manager.go
 // GetNumCategories returns the number of categories.
 func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
 	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
