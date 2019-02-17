@@ -1,4 +1,3 @@
-// TODO: create NewUser(userID... string)
 package manager
 
 import (
@@ -14,6 +13,15 @@ type User struct {
 	AccessToken string          `json:"accessToken" bson:"accessToken"`
 	AccountID   string          `json:"accountId" bson:"accountId"`
 	CategoryIDs []bson.ObjectId `json:"categoryIds" bson:"categoryIds"`
+}
+
+func NewUser(userID ...string) *User {
+	var id bson.ObjectId
+	if len(userID) > 0 {
+		id = bson.ObjectIdHex(userID[0])
+	}
+
+	return &User{ID: id}
 }
 
 // CreateUser creates a user.

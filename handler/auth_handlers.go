@@ -68,7 +68,8 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 	}
 	json.NewDecoder(resp.Body).Decode(&target)
 
-	u := &manager.User{AccountID: target.AccountID}
+	u := manager.NewUser()
+	u.AccountID = target.AccountID
 	if !u.ReadUserByAccountID(env.DB) {
 		u.AccessToken = target.AccessToken
 		u.CreateUser(env.DB)
