@@ -60,3 +60,39 @@ func (user *User) UpdateUser(db *mgo.Database) (found bool) {
 
 	return true
 }
+
+// GetCategories returns a list of categories..
+func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCatID string) []Category {
+	items := []Category{}
+
+	query := bson.M{"parentCategoryId": nil}
+	if len(parentCatID) > 0 {
+		query["parentCategoryId"] = bson.ObjectIdHex(parentCatID)
+	}
+
+	if err := db.C("categories").
+		Find(query).
+		Skip(options.Skip).
+		Limit(options.Limit).
+		Sort(options.Sort...).
+		All(&items); err != nil {
+		log.Fatal(err)
+	}
+
+	return items
+}
+
+// GetNumCategories returns the number of categories.
+func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
+	query := bson.M{"parentCategoryId": nil}
+	if len(parentCatID) > 0 {
+		query["parentCategoryId"] = bson.ObjectIdHex(parentCatID)
+	}
+
+	count, err := db.C("categories").Find(query).Count()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return count
+}
