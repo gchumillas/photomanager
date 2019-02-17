@@ -15,9 +15,17 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
-	if !colsInArray(sortCols, "name") {
-		httpError(w, badParamsError)
-		return
+	for _, col := range sortCols {
+		pos := strings.IndexRune(col, '-')
+		str := col
+		if pos > -1 {
+			str = col[pos+1:]
+		}
+
+		if !inArray(str, []string{"name"}) {
+			httpError(w, badParamsError)
+			return
+		}
 	}
 
 	page, err := strconv.Atoi(getParam(r, "page", "0"))
@@ -55,9 +63,17 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 	parentCatID := params["id"]
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
-	if !colsInArray(sortCols, "name") {
-		httpError(w, badParamsError)
-		return
+	for _, col := range sortCols {
+		pos := strings.IndexRune(col, '-')
+		str := col
+		if pos > -1 {
+			str = col[pos+1:]
+		}
+
+		if !inArray(str, []string{"name"}) {
+			httpError(w, badParamsError)
+			return
+		}
 	}
 
 	page, err := strconv.Atoi(getParam(r, "page", "0"))
@@ -96,6 +112,7 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	catID := params["id"]
 
 	cat := &manager.Category{}
+	// TODO: replace this by if !u.ReadCategory {...}
 	if found := u.ReadCategory(env.DB, catID, cat); !found {
 		httpError(w, docNotFoundError)
 		return

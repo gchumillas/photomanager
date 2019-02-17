@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/gchumillas/photomanager/manager"
 	"github.com/globalsign/mgo"
@@ -61,28 +60,12 @@ func getParam(r *http.Request, key, def string) (param string) {
 	return
 }
 
-func inArray(item string, items []string) (found bool, index int) {
-	for index = range items {
-		if found = (items[index] == item); found {
-			return
+func inArray(item string, items []string) bool {
+	for index := range items {
+		if items[index] == item {
+			return true
 		}
 	}
 
-	return
-}
-
-// TODO: remove this function
-func colsInArray(cols []string, items ...string) bool {
-	for _, col := range cols {
-		str := col
-		if i := strings.IndexRune(col, '-'); i == 0 {
-			str = col[1:]
-		}
-
-		if found, _ := inArray(str, items); !found {
-			return false
-		}
-	}
-
-	return true
+	return false
 }
