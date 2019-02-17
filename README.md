@@ -6,16 +6,16 @@ The application connects to a Dropbox account and allows the user to organize th
 
 ## Create the database
 
-This application uses a MongoDB database. To create it just execute the following command from your terminal (Replace `DATABASE_NAME`):
+This application uses a MongoDB database. To create it simply execute the following command from your terminal:
 ```bash
-mongo DATABASE_NAME dbschema.js
+mongo [ENTER YOUR DATABASE NAME] dbschema.js
 ```
 
 ## Configuration
 Rename `config-example.json` to `config.json` and change the variables.
 
 ## Start the server
-Simply execute the following command from your terminal:
+execute the following command from your terminal:
 ```bash
 ./photomanager
 ```
