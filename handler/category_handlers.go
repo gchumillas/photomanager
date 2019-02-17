@@ -147,7 +147,6 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
 
-	// TODO: use single line
 	cat := &manager.Category{Name: payload.Name}
 	if found := u.UpdateCategory(env.DB, catID, cat); !found {
 		httpError(w, docNotFoundError)
