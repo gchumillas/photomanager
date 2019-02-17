@@ -1,3 +1,4 @@
+// TODO: create NewUser(userID... string)
 package manager
 
 import (
