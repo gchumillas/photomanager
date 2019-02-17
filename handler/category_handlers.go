@@ -1,6 +1,5 @@
 package handler
 
-// TODO: remove bson library
 import (
 	"encoding/json"
 	"net/http"
@@ -8,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/gchumillas/photomanager/manager"
-	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/mux"
 )
 
@@ -84,7 +82,6 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 		numPages++
 	}
 
-	// TODO: change "page" by "numPages"
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"items":    items,
 		"numPages": numPages,
@@ -98,9 +95,8 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	// TODO: use manager.NewCategory(catID)
-	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
-	if found := u.ReadCategory(env.DB, cat); !found {
+	cat := &manager.Category{}
+	if found := u.ReadCategory(env.DB, catID, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -140,13 +136,12 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	}
 	parsePayload(w, r, &payload)
 
+	// TODO: use single line
 	// TODO: verify that the category belongs to the user
 	cat := &manager.Category{
-		ID:     bson.ObjectIdHex(catID),
-		UserID: u.ID,
-		Name:   payload.Name,
+		Name: payload.Name,
 	}
-	if found := u.UpdateCategory(env.DB, cat); !found {
+	if found := u.UpdateCategory(env.DB, catID, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -159,11 +154,7 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	// TODO: verify that the category belongs to the user
-	cat := &manager.Category{
-		ID: bson.ObjectIdHex(catID),
-	}
-	if found := u.DeleteCategory(env.DB, cat); !found {
+	if found := u.DeleteCategory(env.DB, catID); !found {
 		httpError(w, docNotFoundError)
 		return
 	}

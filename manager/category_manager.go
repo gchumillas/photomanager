@@ -16,9 +16,9 @@ func (user *User) CreateCategory(db *mgo.Database, cat *Category) {
 	}
 }
 
-func (user *User) ReadCategory(db *mgo.Database, cat *Category) (found bool) {
+func (user *User) ReadCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
 	query := bson.M{
-		"_id":    cat.ID,
+		"_id":    bson.ObjectIdHex(catID),
 		"userId": user.ID,
 	}
 
@@ -34,9 +34,9 @@ func (user *User) ReadCategory(db *mgo.Database, cat *Category) (found bool) {
 	return true
 }
 
-func (user *User) UpdateCategory(db *mgo.Database, cat *Category) (found bool) {
+func (user *User) UpdateCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
 	query := bson.M{
-		"_id":    cat.ID,
+		"_id":    bson.ObjectIdHex(catID),
 		"userId": user.ID,
 	}
 
@@ -52,9 +52,9 @@ func (user *User) UpdateCategory(db *mgo.Database, cat *Category) (found bool) {
 	return true
 }
 
-func (user *User) DeleteCategory(db *mgo.Database, cat *Category) (found bool) {
+func (user *User) DeleteCategory(db *mgo.Database, catID string) (found bool) {
 	query := bson.M{
-		"_id":    cat.ID,
+		"_id":    bson.ObjectIdHex(catID),
 		"userId": user.ID,
 	}
 
