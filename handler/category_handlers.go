@@ -61,6 +61,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// TODO: move this method under CreateCategory()
 // ReadCategory prints a specific category.
 func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
@@ -68,8 +69,8 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	cat := &manager.Category{}
-	if !u.ReadCategory(env.DB, catID, cat) {
+	var cat *manager.Category
+	if cat = u.ReadCategory(env.DB, catID); cat != nil {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -85,11 +86,9 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{Name: payload.Name}
-	u.CreateCategory(env.DB, cat)
+	id := u.CreateCategory(env.DB, cat)
 
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"id": cat.ID,
-	})
+	json.NewEncoder(w).Encode(map[string]interface{}{"id": id})
 }
 
 // UpdateCategory updates a category.

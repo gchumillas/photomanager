@@ -7,34 +7,43 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-func (user *User) CreateCategory(db *mgo.Database, cat *Category) {
-	cat.ID = bson.NewObjectId()
-	cat.UserID = user.ID
+func (user *User) CreateCategory(db *mgo.Database, cat *Category) string {
+	id := bson.NewObjectId()
+	doc := bson.M{
+		"_id":      id,
+		"userId":   user.ID,
+		"name":     cat.Name,
+		"imageIds": []bson.ObjectId{},
+	}
 
-	if err := db.C("categories").Insert(cat); err != nil {
+	if err := db.C("categories").Insert(doc); err != nil {
 		log.Fatal(err)
 	}
+
+	return id.Hex()
 }
 
-func (user *User) ReadCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
+func (user *User) ReadCategory(db *mgo.Database, catID string) *Category {
 	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
+	cat := &Category{}
 
 	if err := db.C("categories").Find(query).One(cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
-			return false
+			return nil
 		default:
 			log.Fatal(err)
 		}
 	}
 
-	return true
+	return cat
 }
 
 func (user *User) UpdateCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
 	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
+	doc := bson.M{"name": cat.Name}
 
-	if err := db.C("categories").Update(query, cat); err != nil {
+	if err := db.C("categories").Update(query, doc); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
