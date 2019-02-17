@@ -7,16 +7,22 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-// CreateCategory inserts a category.
-func (cat *Category) CreateCategory(db *mgo.Database) {
+func (user *User) CreateCategory(db *mgo.Database, cat *Category) {
+	cat.ID = bson.NewObjectId()
+	cat.UserID = user.ID
+
 	if err := db.C("categories").Insert(cat); err != nil {
 		log.Fatal(err)
 	}
 }
 
-// ReadCategory return a category.
-func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
-	if err := db.C("categories").FindId(cat.ID).One(cat); err != nil {
+func (user *User) ReadCategory(db *mgo.Database, cat *Category) (found bool) {
+	query := bson.M{
+		"_id":    cat.ID,
+		"userId": user.ID,
+	}
+
+	if err := db.C("categories").Find(query).One(cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
@@ -28,9 +34,13 @@ func (cat *Category) ReadCategory(db *mgo.Database) (found bool) {
 	return true
 }
 
-// UpdateCategory updates a category.
-func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
-	if err := db.C("categories").UpdateId(cat.ID, cat); err != nil {
+func (user *User) UpdateCategory(db *mgo.Database, cat *Category) (found bool) {
+	query := bson.M{
+		"_id":    cat.ID,
+		"userId": user.ID,
+	}
+
+	if err := db.C("categories").Update(query, cat); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
@@ -42,9 +52,13 @@ func (cat *Category) UpdateCategory(db *mgo.Database) (found bool) {
 	return true
 }
 
-// DeleteCategory deletes a category.
-func (cat *Category) DeleteCategory(db *mgo.Database) (found bool) {
-	if err := db.C("categories").RemoveId(cat.ID); err != nil {
+func (user *User) DeleteCategory(db *mgo.Database, cat *Category) (found bool) {
+	query := bson.M{
+		"_id":    cat.ID,
+		"userId": user.ID,
+	}
+
+	if err := db.C("categories").Remove(query); err != nil {
 		switch err {
 		case mgo.ErrNotFound:
 			return false
@@ -72,6 +86,7 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[
 	}
 }
 
+// TODO: remove this function
 // GetSubategories returns a list of categories..
 func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
 	query := bson.M{
@@ -102,6 +117,7 @@ func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
 	return count
 }
 
+// TODO: remove this function
 // GetNumCategories returns the number of categories.
 func (user *User) GetNumSubcategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
 	query := bson.M{

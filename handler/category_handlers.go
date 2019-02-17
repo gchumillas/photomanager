@@ -93,12 +93,14 @@ func (env *Env) GetSubcategories(w http.ResponseWriter, r *http.Request) {
 
 // ReadCategory prints a specific category.
 func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
 	params := mux.Vars(r)
 	catID := params["id"]
 
 	// TODO: use manager.NewCategory(catID)
 	cat := &manager.Category{ID: bson.ObjectIdHex(catID)}
-	if found := cat.ReadCategory(env.DB); !found {
+	if found := u.ReadCategory(env.DB, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -108,16 +110,17 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 
 // CreateCategory inserts a category.
 func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
 	var payload struct {
 		Name string
 	}
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{
-		ID:   bson.NewObjectId(),
 		Name: payload.Name,
 	}
-	cat.CreateCategory(env.DB)
+	u.CreateCategory(env.DB, cat)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"id": cat.ID,
@@ -126,20 +129,24 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 
 // UpdateCategory updates a category.
 func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
 	params := mux.Vars(r)
 	catID := params["id"]
 
+	// TODO: category name is required
 	var payload struct {
 		Name string
 	}
 	parsePayload(w, r, &payload)
 
+	// TODO: verify that the category belongs to the user
 	cat := &manager.Category{
-		ID:       bson.ObjectIdHex(catID),
-		Name:     payload.Name,
-		ImageIDs: []bson.ObjectId{},
+		ID:     bson.ObjectIdHex(catID),
+		UserID: u.ID,
+		Name:   payload.Name,
 	}
-	if found := cat.UpdateCategory(env.DB); !found {
+	if found := u.UpdateCategory(env.DB, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -147,13 +154,16 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 
 // DeleteCategory deletes a category.
 func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
 	params := mux.Vars(r)
 	catID := params["id"]
 
+	// TODO: verify that the category belongs to the user
 	cat := &manager.Category{
 		ID: bson.ObjectIdHex(catID),
 	}
-	if found := cat.DeleteCategory(env.DB); !found {
+	if found := u.DeleteCategory(env.DB, cat); !found {
 		httpError(w, docNotFoundError)
 		return
 	}

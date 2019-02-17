@@ -13,6 +13,7 @@ type User struct {
 // Category entity.
 type Category struct {
 	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
+	UserID   bson.ObjectId   `json:"userId" bson:"userId"`
 	Name     string          `json:"name"`
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }

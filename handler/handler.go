@@ -71,6 +71,7 @@ func inArray(item string, items []string) (found bool, index int) {
 	return
 }
 
+// TODO: remove this function
 func colsInArray(cols []string, items ...string) bool {
 	for _, col := range cols {
 		str := col
