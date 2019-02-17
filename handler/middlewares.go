@@ -24,7 +24,7 @@ func (env *Env) AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		u := &manager.User{AccessToken: token}
-		if found := u.ReadUserByToken(env.DB); !found {
+		if !u.ReadUserByToken(env.DB) {
 			httpError(w, unauthorizedError)
 			return
 		}

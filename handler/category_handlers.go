@@ -113,7 +113,7 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 
 	cat := &manager.Category{}
 	// TODO: replace this by if !u.ReadCategory {...}
-	if found := u.ReadCategory(env.DB, catID, cat); !found {
+	if !u.ReadCategory(env.DB, catID, cat) {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -148,7 +148,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	parsePayload(w, r, &payload)
 
 	cat := &manager.Category{Name: payload.Name}
-	if found := u.UpdateCategory(env.DB, catID, cat); !found {
+	if !u.UpdateCategory(env.DB, catID, cat) {
 		httpError(w, docNotFoundError)
 		return
 	}
@@ -161,7 +161,7 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	if found := u.DeleteCategory(env.DB, catID); !found {
+	if !u.DeleteCategory(env.DB, catID) {
 		httpError(w, docNotFoundError)
 		return
 	}
