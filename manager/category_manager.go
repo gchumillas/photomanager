@@ -17,10 +17,7 @@ func (user *User) CreateCategory(db *mgo.Database, cat *Category) {
 }
 
 func (user *User) ReadCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
-	query := bson.M{
-		"_id":    bson.ObjectIdHex(catID),
-		"userId": user.ID,
-	}
+	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
 
 	if err := db.C("categories").Find(query).One(cat); err != nil {
 		switch err {
@@ -35,10 +32,7 @@ func (user *User) ReadCategory(db *mgo.Database, catID string, cat *Category) (f
 }
 
 func (user *User) UpdateCategory(db *mgo.Database, catID string, cat *Category) (found bool) {
-	query := bson.M{
-		"_id":    bson.ObjectIdHex(catID),
-		"userId": user.ID,
-	}
+	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
 
 	if err := db.C("categories").Update(query, cat); err != nil {
 		switch err {
@@ -53,10 +47,7 @@ func (user *User) UpdateCategory(db *mgo.Database, catID string, cat *Category) 
 }
 
 func (user *User) DeleteCategory(db *mgo.Database, catID string) (found bool) {
-	query := bson.M{
-		"_id":    bson.ObjectIdHex(catID),
-		"userId": user.ID,
-	}
+	query := bson.M{"_id": bson.ObjectIdHex(catID), "userId": user.ID}
 
 	if err := db.C("categories").Remove(query); err != nil {
 		switch err {
@@ -72,9 +63,7 @@ func (user *User) DeleteCategory(db *mgo.Database, catID string) (found bool) {
 
 // GetCategories returns a list of categories..
 func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[]Category) {
-	query := bson.M{
-		"parentCategoryId": nil,
-	}
+	query := bson.M{"parentCategoryId": nil}
 
 	if err := db.C("categories").
 		Find(query).
@@ -89,9 +78,7 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, items *[
 // TODO: remove this function
 // GetSubategories returns a list of categories..
 func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
-	query := bson.M{
-		"parentCategoryId": bson.ObjectIdHex(parentCatID),
-	}
+	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 
 	if err := db.C("categories").
 		Find(query).
@@ -105,9 +92,7 @@ func (user *User) GetSubcategories(db *mgo.Database, options QueryOptions, paren
 
 // GetNumCategories returns the number of categories.
 func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
-	query := bson.M{
-		"parentCategoryId": nil,
-	}
+	query := bson.M{"parentCategoryId": nil}
 
 	count, err := db.C("categories").Find(query).Count()
 	if err != nil {
@@ -120,9 +105,7 @@ func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions) int {
 // TODO: remove this function
 // GetNumCategories returns the number of categories.
 func (user *User) GetNumSubcategories(db *mgo.Database, options QueryOptions, parentCatID string) int {
-	query := bson.M{
-		"parentCategoryId": bson.ObjectIdHex(parentCatID),
-	}
+	query := bson.M{"parentCategoryId": bson.ObjectIdHex(parentCatID)}
 
 	count, err := db.C("categories").Find(query).Count()
 	if err != nil {

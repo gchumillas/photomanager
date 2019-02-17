@@ -108,14 +108,10 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
-	var payload struct {
-		Name string
-	}
+	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
 
-	cat := &manager.Category{
-		Name: payload.Name,
-	}
+	cat := &manager.Category{Name: payload.Name}
 	u.CreateCategory(env.DB, cat)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -131,16 +127,11 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	catID := params["id"]
 
 	// TODO: category name is required
-	var payload struct {
-		Name string
-	}
+	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
 
 	// TODO: use single line
-	// TODO: verify that the category belongs to the user
-	cat := &manager.Category{
-		Name: payload.Name,
-	}
+	cat := &manager.Category{Name: payload.Name}
 	if found := u.UpdateCategory(env.DB, catID, cat); !found {
 		httpError(w, docNotFoundError)
 		return

@@ -42,10 +42,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	env := &handler.Env{
-		DB:              db,
-		MaxItemsPerPage: conf.MaxItemsPerPage,
-	}
+	env := &handler.Env{DB: db, MaxItemsPerPage: conf.MaxItemsPerPage}
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
 	r.Use(handler.JSONMiddleware)
