@@ -33,6 +33,7 @@ func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey, redir
 	json.NewEncoder(w).Encode(u.String())
 }
 
+// Login logs into the system.
 func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret, redirectURI string) {
 	code := getParam(r, "code", "")
 	uri := getParam(r, "redirect_uri", redirectURI)

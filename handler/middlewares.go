@@ -8,7 +8,7 @@ import (
 	"github.com/gchumillas/photomanager/manager"
 )
 
-// JSONMiddleware returns a middleware handler.
+// JSONMiddleware sets the content type to JSON.
 func (env *Env) JSONMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -16,6 +16,7 @@ func (env *Env) JSONMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// AuthMiddleware verifies that the current user is authenticated.
 func (env *Env) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := ""

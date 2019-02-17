@@ -7,7 +7,8 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-// Category entity.
+// Category entity. A category may contain multiple images and an image can
+// belong to multiple categories.
 type Category struct {
 	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
 	UserID   bson.ObjectId   `json:"userId" bson:"userId"`
@@ -15,6 +16,7 @@ type Category struct {
 	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
 }
 
+// NewCategory returns a new category.
 func NewCategory(catID ...string) *Category {
 	var id bson.ObjectId
 	if len(catID) > 0 {
@@ -24,6 +26,7 @@ func NewCategory(catID ...string) *Category {
 	return &Category{ID: id}
 }
 
+// CreateCategory inserts a category.
 func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	cat.ID = bson.NewObjectId()
 	cat.UserID = user.ID
@@ -33,6 +36,7 @@ func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	}
 }
 
+// ReadCategory fetches a category.
 func (cat *Category) ReadCategory(db *mgo.Database, user *User) (found bool) {
 	query := bson.M{"_id": cat.ID, "userId": user.ID}
 
@@ -48,6 +52,7 @@ func (cat *Category) ReadCategory(db *mgo.Database, user *User) (found bool) {
 	return true
 }
 
+// UpdateCategory updates a category.
 func (cat *Category) UpdateCategory(db *mgo.Database, user *User) (found bool) {
 	query := bson.M{"_id": cat.ID, "userId": user.ID}
 	cat.UserID = user.ID
@@ -64,6 +69,7 @@ func (cat *Category) UpdateCategory(db *mgo.Database, user *User) (found bool) {
 	return true
 }
 
+// DeleteCategory deletes a category.
 func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
 	query := bson.M{"_id": cat.ID, "userId": user.ID}
 

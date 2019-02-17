@@ -7,14 +7,15 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-// User entity.
+// User entity. The AccessToken and AccountID properties are provided by the
+// user's Dropbox account.
 type User struct {
-	ID          bson.ObjectId   `json:"id" bson:"_id,omitempty"`
-	AccessToken string          `json:"accessToken" bson:"accessToken"`
-	AccountID   string          `json:"accountId" bson:"accountId"`
-	CategoryIDs []bson.ObjectId `json:"categoryIds" bson:"categoryIds"`
+	ID          bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	AccessToken string        `json:"accessToken" bson:"accessToken"`
+	AccountID   string        `json:"accountId" bson:"accountId"`
 }
 
+// NewUser creates a user.
 func NewUser(userID ...string) *User {
 	var id bson.ObjectId
 	if len(userID) > 0 {
@@ -47,7 +48,7 @@ func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
 	return true
 }
 
-// ReadUserByAccountID searches a user by access token.
+// ReadUserByToken searches a user by access token.
 func (user *User) ReadUserByToken(db *mgo.Database) (found bool) {
 	query := bson.M{"accessToken": user.AccessToken}
 

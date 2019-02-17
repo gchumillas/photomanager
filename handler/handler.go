@@ -29,7 +29,7 @@ var (
 	unauthorizedError = httpStatus{"Not authorized.", 401}
 )
 
-// Env contains environment variables.
+// Env contains common variables, such as the database access, etc.
 type Env struct {
 	DB              *mgo.Database
 	MaxItemsPerPage int

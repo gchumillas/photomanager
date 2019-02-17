@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// GetCategories prints all categories.
+// GetCategories gets all the categories.
 func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
@@ -76,7 +76,7 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]interface{}{"id": cat.ID})
 }
 
-// ReadCategory prints a specific category.
+// ReadCategory gets a category.
 func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
