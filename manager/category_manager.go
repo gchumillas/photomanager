@@ -7,6 +7,14 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// Category entity.
+type Category struct {
+	ID       bson.ObjectId   `json:"id" bson:"_id,omitempty"`
+	UserID   bson.ObjectId   `json:"userId" bson:"userId"`
+	Name     string          `json:"name"`
+	ImageIDs []bson.ObjectId `json:"imageIds" bson:"imageIds"`
+}
+
 func NewCategory(catID ...string) *Category {
 	var id bson.ObjectId
 	if len(catID) > 0 {
