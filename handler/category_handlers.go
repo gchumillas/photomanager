@@ -84,6 +84,10 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
+	if len(payload.Name) == 0 {
+		httpError(w, badParamsError)
+		return
+	}
 
 	cat := manager.NewCategory()
 	cat.Name = payload.Name
@@ -99,9 +103,12 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	catID := params["id"]
 
-	// TODO: category name is required
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
+	if len(payload.Name) == 0 {
+		httpError(w, badParamsError)
+		return
+	}
 
 	cat := manager.NewCategory(catID)
 	cat.Name = payload.Name
