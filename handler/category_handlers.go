@@ -37,13 +37,12 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items := []manager.Category{}
 	options := manager.QueryOptions{
 		Skip:  page * env.MaxItemsPerPage,
 		Limit: env.MaxItemsPerPage,
 		Sort:  sortCols,
 	}
-	u.GetCategories(env.DB, options, parentCatID, &items)
+	items := u.GetCategories(env.DB, options, parentCatID)
 
 	// Gets the number of pages.
 	numItems := u.GetNumCategories(env.DB, options, parentCatID)

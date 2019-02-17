@@ -72,9 +72,10 @@ func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
 }
 
 // TODO: move this function to user_manager.go
-// TODO: remove the items argument
 // GetCategories returns a list of categories..
-func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCatID string, items *[]Category) {
+func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCatID string) []Category {
+	items := []Category{}
+
 	query := bson.M{"parentCategoryId": nil}
 	if len(parentCatID) > 0 {
 		query["parentCategoryId"] = bson.ObjectIdHex(parentCatID)
@@ -85,9 +86,11 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCa
 		Skip(options.Skip).
 		Limit(options.Limit).
 		Sort(options.Sort...).
-		All(items); err != nil {
+		All(&items); err != nil {
 		log.Fatal(err)
 	}
+
+	return items
 }
 
 // TODO: move this function to user_manager.go
