@@ -8,6 +8,14 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// User entity.
+type User struct {
+	ID          bson.ObjectId   `json:"id" bson:"_id,omitempty"`
+	AccessToken string          `json:"accessToken" bson:"accessToken"`
+	AccountID   string          `json:"accountId" bson:"accountId"`
+	CategoryIDs []bson.ObjectId `json:"categoryIds" bson:"categoryIds"`
+}
+
 // CreateUser creates a user.
 func (user *User) CreateUser(db *mgo.Database) {
 	if err := db.C("users").Insert(user); err != nil {
