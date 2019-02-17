@@ -45,7 +45,7 @@ func main() {
 	env := &handler.Env{DB: db, MaxItemsPerPage: conf.MaxItemsPerPage}
 	prefix := fmt.Sprintf("/%s", strings.TrimLeft(conf.APIVersion, "/"))
 	r := mux.NewRouter()
-	r.Use(handler.JSONMiddleware)
+	r.Use(env.JSONMiddleware)
 	s := r.PathPrefix(prefix).Subrouter()
 
 	// authentication (public routes)
