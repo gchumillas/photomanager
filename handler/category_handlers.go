@@ -58,23 +58,6 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// TODO: move this method under CreateCategory()
-// ReadCategory prints a specific category.
-func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
-	u := getAuthUser(r)
-
-	params := mux.Vars(r)
-	catID := params["id"]
-
-	cat := manager.NewCategory(catID)
-	if !cat.ReadCategory(env.DB, u) {
-		httpError(w, docNotFoundError)
-		return
-	}
-
-	json.NewEncoder(w).Encode(cat)
-}
-
 // CreateCategory inserts a category.
 func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
@@ -91,6 +74,22 @@ func (env *Env) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	cat.CreateCategory(env.DB, u)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{"id": cat.ID})
+}
+
+// ReadCategory prints a specific category.
+func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
+	params := mux.Vars(r)
+	catID := params["id"]
+
+	cat := manager.NewCategory(catID)
+	if !cat.ReadCategory(env.DB, u) {
+		httpError(w, docNotFoundError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cat)
 }
 
 // UpdateCategory updates a category.
