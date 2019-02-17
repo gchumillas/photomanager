@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,7 +16,6 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	parentCatID := params["id"]
-	log.Println("parentCategoryId", parentCatID)
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
 	for _, col := range sortCols {
