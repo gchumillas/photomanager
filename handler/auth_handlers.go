@@ -4,16 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"net/url"
-	"strings"
 
 	"github.com/gchumillas/photomanager/dbox"
 	"github.com/gchumillas/photomanager/manager"
-)
-
-const (
-	authURL  = "https://api.dropbox.com/oauth2/authorize"
-	tokenURL = "https://api.dropbox.com/oauth2/token"
 )
 
 // GetAuthURL gets the authentication URL.
@@ -37,45 +30,24 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 		return
 	}
 
-	data := url.Values{}
-	data.Set("code", code)
-	data.Set("grant_type", "authorization_code")
-	data.Set("redirect_uri", uri)
-	body := strings.NewReader(data.Encode())
-
-	req, _ := http.NewRequest("POST", tokenURL, body)
-	req.SetBasicAuth(appKey, appSecret)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	resp, err := http.DefaultClient.Do(req)
+	token, accountID, err := dbox.GetAuthToken(uri, code, appKey, appSecret)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
-		httpError(w, badParamsError)
-		return
-	}
-
-	var target struct {
-		AccessToken string `json:"access_token"`
-		AccountID   string `json:"account_id"`
-	}
-	json.NewDecoder(resp.Body).Decode(&target)
-
+	// TODO: checkout this piece of code
 	u := manager.NewUser()
-	u.AccountID = target.AccountID
+	u.AccountID = accountID
 	if !u.ReadUserByAccountID(env.DB) {
-		u.AccessToken = target.AccessToken
+		u.AccessToken = token
 		u.CreateUser(env.DB)
 	} else {
-		u.AccessToken = target.AccessToken
+		u.AccessToken = token
 		u.UpdateUser(env.DB)
 	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"uid":   target.AccountID,
-		"token": target.AccessToken,
+		"uid":   accountID,
+		"token": token,
 	})
 }
