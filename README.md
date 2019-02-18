@@ -31,4 +31,4 @@ go install
 photomanager
 ```
 
-Make sure that `$GOPATH/bin` is included your `$PATH` environment variable.
+Make sure that `$GOPATH/bin` is included in your `$PATH` environment variable.
