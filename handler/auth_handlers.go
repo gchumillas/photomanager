@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gchumillas/photomanager/dbox"
 	"github.com/gchumillas/photomanager/manager"
 )
 
@@ -23,14 +24,8 @@ func (env *Env) GetAuthURL(w http.ResponseWriter, r *http.Request, appKey, redir
 		return
 	}
 
-	u, _ := url.Parse(authURL)
-	q := u.Query()
-	q.Add("redirect_uri", uri)
-	q.Add("client_id", appKey)
-	q.Add("response_type", "code")
-	u.RawQuery = q.Encode()
-
-	json.NewEncoder(w).Encode(u.String())
+	u := dbox.GetAuthURL(uri, appKey)
+	json.NewEncoder(w).Encode(u)
 }
 
 // Login logs into the system.
