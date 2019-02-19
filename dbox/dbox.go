@@ -3,6 +3,7 @@ package dbox
 import (
 	"encoding/json"
 	"errors"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -10,8 +11,9 @@ import (
 )
 
 const (
-	authURL  = "https://api.dropbox.com/oauth2/authorize"
-	tokenURL = "https://api.dropbox.com/oauth2/token"
+	authURL   = "https://api.dropbox.com/oauth2/authorize"
+	tokenURL  = "https://api.dropbox.com/oauth2/token"
+	uploadURL = "https://content.dropboxapi.com/2/files/upload"
 )
 
 // GetAuthURL gets the authentication URL.
@@ -55,4 +57,21 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 	json.NewDecoder(resp.Body).Decode(&target)
 
 	return target.AccessToken, target.AccountID, nil
+}
+
+// UploadFile uploads a file to the user'x box.
+func UploadFile(token string, file io.Reader, dest string) {
+	req, err := http.NewRequest("POST", uploadURL, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Dropbox-Api-Arg", "{\"path\": \"/image.jpg\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}")
+	req.Header.Set("Content-Type", "application/octet-stream")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
 }

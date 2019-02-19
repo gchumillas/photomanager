@@ -32,6 +32,7 @@ func main() {
 
 	session, err := mgo.Dial(conf.MongoURI)
 	if err != nil {
+		// TODO: replace log.Fatal by log.Panic
 		log.Fatal(err)
 	}
 	defer session.Close()
@@ -64,6 +65,7 @@ func main() {
 	cats.HandleFunc("/{id}/categories", env.GetCategories).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
+	cats.HandleFunc("/{idea}/images", env.UploadImage).Methods("POST")
 	cats.Use(env.AuthMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
