@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,34 +11,42 @@ import (
 	"github.com/globalsign/mgo"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/pelletier/go-toml"
 )
 
+type dropboxConfig struct {
+	AppKey      string `toml:"appKey"`
+	AppSecret   string `toml:"appSecret"`
+	RedirectURI string `toml:"redirectUri"`
+}
+
+type mongoConfig struct {
+	URI  string `toml:"uri"`
+	DB   string `toml:"db"`
+	User string `toml:"user"`
+	Pass string `toml:"pass"`
+}
+
 type config struct {
-	APIVersion         string `json:"apiVersion"`
-	ServerAddr         string `json:"serverAddr"`
-	MaxItemsPerPage    int    `json:"maxItemsPerPage"`
-	MongoURI           string `json:"mongoUri"`
-	MongoDB            string `json:"mongoDb"`
-	MongoUser          string `json:"mongoUser"`
-	MongoPass          string `json:"mongoPass"`
-	DropboxAppKey      string `json:"dropboxAppKey"`
-	DropboxAppSecret   string `json:"dropboxAppSecret"`
-	DropboxRedirectURI string `json:"dropboxRedirectUri"`
+	APIVersion      string `toml:"apiVersion"`
+	ServerAddr      string `toml:"serverAddr"`
+	MaxItemsPerPage int    `toml:"maxItemsPerPage"`
+	Mongo           mongoConfig
+	Dropbox         dropboxConfig
 }
 
 func main() {
-	// TODO: replace json by yaml or toml
-	conf := loadConfig("config.json")
+	conf := loadConfig("config.toml")
 
-	session, err := mgo.Dial(conf.MongoURI)
+	session, err := mgo.Dial(conf.Mongo.URI)
 	if err != nil {
 		// TODO: replace log.Fatal by log.Panic
 		log.Fatal(err)
 	}
 	defer session.Close()
 
-	db := session.DB(conf.MongoDB)
-	if err = db.Login(conf.MongoUser, conf.MongoPass); err != nil {
+	db := session.DB(conf.Mongo.DB)
+	if err = db.Login(conf.Mongo.User, conf.Mongo.Pass); err != nil {
 		log.Fatal(err)
 	}
 
@@ -52,10 +59,10 @@ func main() {
 	// authentication (public routes)
 	auth := s.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/url", func(w http.ResponseWriter, r *http.Request) {
-		env.GetAuthURL(w, r, conf.DropboxAppKey, conf.DropboxRedirectURI)
+		env.GetAuthURL(w, r, conf.Dropbox.AppKey, conf.Dropbox.RedirectURI)
 	}).Methods("GET")
 	auth.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		env.Login(w, r, conf.DropboxAppKey, conf.DropboxAppSecret, conf.DropboxRedirectURI)
+		env.Login(w, r, conf.Dropbox.AppKey, conf.Dropbox.AppSecret, conf.Dropbox.RedirectURI)
 	})
 
 	// categories (private routes)
@@ -85,7 +92,7 @@ func loadConfig(filename string) (conf config) {
 		log.Fatal(err)
 	}
 
-	decoder := json.NewDecoder(file)
+	decoder := toml.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
 		log.Fatal(err)

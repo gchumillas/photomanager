@@ -39,6 +39,14 @@
   revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
   version = "v1.6.2"
 
+[[projects]]
+  digest = "1:95741de3af260a92cc5c7f3f3061e85273f5a81b5db20d4bd68da74bd521675e"
+  name = "github.com/pelletier/go-toml"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
+  version = "v1.2.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -47,6 +55,7 @@
     "github.com/globalsign/mgo/bson",
     "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
+    "github.com/pelletier/go-toml",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,0 +1,14 @@
+apiVersion      = "v1"
+serverAddr      = "localhost:8080"
+maxItemsPerPage = 10
+
+[mongo]
+uri  = "mongodb://localhost:27017"
+db   = "[DATABASE NAME]"
+user = "[USER NAME]"
+pass = "[USER PASSWORD]"
+
+[dropbox]
+appKey      = "[APPLICATION KEY]"
+appSecret   = "[APPLICATION SECRET]"
+redirectUri = "[REDIRECT URI, OPTIONAL]"
