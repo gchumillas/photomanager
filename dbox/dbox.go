@@ -60,13 +60,18 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 }
 
 // UploadFile uploads a file to the user'x box.
-func UploadFile(token string, file io.Reader, dest string) {
+func UploadFile(token string, file io.Reader, path string) (id string) {
+	payload, _ := json.Marshal(map[string]interface{}{
+		"path":       path,
+		"autorename": true,
+	})
+
 	req, err := http.NewRequest("POST", uploadURL, file)
 	if err != nil {
 		log.Panic(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Dropbox-Api-Arg", "{\"path\": \"/image.jpg\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}")
+	req.Header.Set("Dropbox-Api-Arg", string(payload))
 	req.Header.Set("Content-Type", "application/octet-stream")
 
 	resp, err := http.DefaultClient.Do(req)
@@ -74,4 +79,15 @@ func UploadFile(token string, file io.Reader, dest string) {
 		log.Panic(err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		log.Panic(resp.Status)
+	}
+
+	var target struct {
+		ID string `json:"id"`
+	}
+	json.NewDecoder(resp.Body).Decode(&target)
+
+	return target.ID
 }

@@ -87,6 +87,7 @@ func main() {
 	}).Methods("POST")
 	imgs.Use(env.AuthMiddleware)
 
+	// TODO: is there any way to recover 'panics' and print pretty errors?
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Panic(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
 }
