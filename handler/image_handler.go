@@ -22,12 +22,14 @@ func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request, maxMemorySiz
 	defer file.Close()
 
 	path := "/" + strings.TrimLeft(handler.Filename, "/")
-
-	// TODO: if two images are identical, dropbox doesn't create a new image
 	imageID := dbox.UploadFile(u.AccessToken, file, path)
 
 	img := manager.NewImage()
 	img.ImageID = imageID
+	if img.ReadImageByID(env.DB) {
+		httpError(w, duplicateImageError)
+		return
+	}
 	img.CreateImage(env.DB, u)
 
 	json.NewEncoder(w).Encode(map[string]interface{}{"id": img.ID})

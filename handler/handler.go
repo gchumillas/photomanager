@@ -23,10 +23,11 @@ var contextAuthUser = contextKey("auth-user")
 
 // Common http errors.
 var (
-	payloadError      = httpStatus{"The payload is not well formed.", 400}
-	docNotFoundError  = httpStatus{"Document not found.", 404}
-	badParamsError    = httpStatus{"Bad parameters.", 400}
-	unauthorizedError = httpStatus{"Not authorized.", 401}
+	payloadError        = httpStatus{"The payload is not well formed.", 400}
+	badParamsError      = httpStatus{"Bad parameters.", 400}
+	duplicateImageError = httpStatus{"Duplicate image.", 400}
+	unauthorizedError   = httpStatus{"Not authorized.", 401}
+	docNotFoundError    = httpStatus{"Document not found.", 404}
 )
 
 // Env contains common variables, such as the database access, etc.
