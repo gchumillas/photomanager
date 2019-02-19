@@ -65,8 +65,12 @@ func main() {
 	cats.HandleFunc("/{id}/categories", env.GetCategories).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
-	cats.HandleFunc("/{idea}/images", env.UploadImage).Methods("POST")
 	cats.Use(env.AuthMiddleware)
+
+	// images (private routes)
+	imgs := s.PathPrefix("/images").Subrouter()
+	imgs.HandleFunc("", env.UploadImage).Methods("POST")
+	imgs.Use(env.AuthMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
 	log.Fatal(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
