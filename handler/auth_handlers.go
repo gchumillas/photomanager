@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gchumillas/photomanager/dbox"
@@ -30,10 +29,7 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request, appKey, appSecret,
 		return
 	}
 
-	token, accountID, err := dbox.GetAuthToken(uri, code, appKey, appSecret)
-	if err != nil {
-		log.Fatal(err)
-	}
+	token, accountID := dbox.GetAuthToken(uri, code, appKey, appSecret)
 
 	// TODO: checkout this piece of code
 	u := manager.NewUser()

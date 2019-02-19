@@ -29,7 +29,7 @@ func GetAuthURL(redirectURI, appKey string) string {
 }
 
 // GetAuthToken gets a token and the user's account ID.
-func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID string, err error) {
+func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID string) {
 	data := url.Values{}
 	data.Set("code", code)
 	data.Set("grant_type", "authorization_code")
@@ -47,7 +47,7 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return "", "", errors.New(resp.Status)
+		log.Fatal(errors.New(resp.Status))
 	}
 
 	var target struct {
@@ -56,7 +56,7 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 	}
 	json.NewDecoder(resp.Body).Decode(&target)
 
-	return target.AccessToken, target.AccountID, nil
+	return target.AccessToken, target.AccountID
 }
 
 // UploadFile uploads a file to the user'x box.
