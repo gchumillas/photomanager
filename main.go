@@ -27,12 +27,18 @@ type mongoConfig struct {
 	Pass string `toml:"pass"`
 }
 
+type uploadsConfig struct {
+	MaxMemorySize int64 `toml:"maxMemorySize"`
+}
+
 type config struct {
 	APIVersion      string `toml:"apiVersion"`
 	ServerAddr      string `toml:"serverAddr"`
 	MaxItemsPerPage int    `toml:"maxItemsPerPage"`
+	MaxUploadSize   int64  `toml:"maxUploadSize"`
 	Mongo           mongoConfig
 	Dropbox         dropboxConfig
+	Uploads         uploadsConfig
 }
 
 func main() {
@@ -77,7 +83,9 @@ func main() {
 
 	// images (private routes)
 	imgs := s.PathPrefix("/images").Subrouter()
-	imgs.HandleFunc("", env.UploadImage).Methods("POST")
+	imgs.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
+		env.UploadImage(w, r, conf.Uploads.MaxMemorySize)
+	}).Methods("POST")
 	imgs.Use(env.AuthMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)

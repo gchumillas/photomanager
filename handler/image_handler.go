@@ -7,11 +7,10 @@ import (
 	"github.com/gchumillas/photomanager/dbox"
 )
 
-func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request) {
+func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request, maxMemorySize int64) {
 	u := getAuthUser(r)
 
-	// TODO: 32 Mebibits must be in config
-	r.ParseMultipartForm(32 << 10)
+	r.ParseMultipartForm(maxMemorySize)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		log.Fatal(err)

@@ -1,6 +1,7 @@
 apiVersion      = "v1"
 serverAddr      = "localhost:8080"
 maxItemsPerPage = 10
+maxUploadSize   = 32 # Mebibytes
 
 [mongo]
 uri  = "mongodb://localhost:27017"
@@ -12,3 +13,11 @@ pass = "[USER PASSWORD]"
 appKey      = "[APPLICATION KEY]"
 appSecret   = "[APPLICATION SECRET]"
 redirectUri = "[REDIRECT URI, OPTIONAL]"
+
+[uploads]
+# Maximum reserved memory for uploaded files in bytes.
+#
+# Part of the loaded file is stored in memory, while the rest remains in
+# temporary files. Increase or decrease this value depending on the
+# capabilities of the machine.
+maxMemorySize   = 33554432
