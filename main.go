@@ -46,13 +46,13 @@ func main() {
 
 	session, err := mgo.Dial(conf.Mongo.URI)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 	defer session.Close()
 
 	db := session.DB(conf.Mongo.DB)
 	if err = db.Login(conf.Mongo.User, conf.Mongo.Pass); err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 
 	env := &handler.Env{DB: db, MaxItemsPerPage: conf.MaxItemsPerPage}
@@ -87,9 +87,13 @@ func main() {
 	}).Methods("POST")
 	imgs.Use(env.AuthMiddleware)
 
-	// TODO: is there any way to recover 'panics' and print pretty errors?
 	log.Printf("Server started at port %v", conf.ServerAddr)
-	log.Panic(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
+	log.Fatal(http.ListenAndServe(
+		conf.ServerAddr,
+		handlers.RecoveryHandler(
+			handlers.PrintRecoveryStack(false),
+		)(r),
+	))
 }
 
 func loadConfig(filename string) (conf config) {
@@ -97,13 +101,13 @@ func loadConfig(filename string) (conf config) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 
 	decoder := toml.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 
 	return

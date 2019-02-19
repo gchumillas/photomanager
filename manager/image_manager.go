@@ -1,8 +1,6 @@
 package manager
 
 import (
-	"log"
-
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 )
@@ -28,6 +26,6 @@ func (image *Image) CreateImage(db *mgo.Database, user *User) {
 	image.UserID = user.ID
 
 	if err := db.C("images").Insert(image); err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 }

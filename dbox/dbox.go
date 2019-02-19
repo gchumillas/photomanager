@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -42,12 +41,12 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		log.Panic(errors.New(resp.Status))
+		panic(errors.New(resp.Status))
 	}
 
 	var target struct {
@@ -68,7 +67,7 @@ func UploadFile(token string, file io.Reader, path string) (id string) {
 
 	req, err := http.NewRequest("POST", uploadURL, file)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Dropbox-Api-Arg", string(payload))
@@ -76,12 +75,12 @@ func UploadFile(token string, file io.Reader, path string) (id string) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		log.Panic(resp.Status)
+		panic(resp.Status)
 	}
 
 	var target struct {

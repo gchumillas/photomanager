@@ -1,8 +1,6 @@
 package manager
 
 import (
-	"log"
-
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 )
@@ -32,7 +30,7 @@ func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	cat.UserID = user.ID
 
 	if err := db.C("categories").Insert(cat); err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 }
 
@@ -45,7 +43,7 @@ func (cat *Category) ReadCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Panic(err)
+			panic(err)
 		}
 	}
 
@@ -62,7 +60,7 @@ func (cat *Category) UpdateCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Panic(err)
+			panic(err)
 		}
 	}
 
@@ -78,7 +76,7 @@ func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Panic(err)
+			panic(err)
 		}
 	}
 

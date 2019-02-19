@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strings"
 
@@ -18,7 +17,7 @@ func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request, maxMemorySiz
 	r.ParseMultipartForm(maxMemorySize)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 	defer file.Close()
 
