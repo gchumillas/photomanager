@@ -74,9 +74,12 @@ db.createCollection(
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['imageId'],
+        required: ['userId', 'imageId'],
         properties: {
-          path: {
+          userId: {
+            bsonType: 'objectId'
+          },
+          imageId: {
             bsonType: 'string'
           }
         }
