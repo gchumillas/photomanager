@@ -28,6 +28,7 @@ type config struct {
 }
 
 func main() {
+	// TODO: replace json by yaml or toml
 	conf := loadConfig("config.json")
 
 	session, err := mgo.Dial(conf.MongoURI)
