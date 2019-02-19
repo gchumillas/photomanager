@@ -21,11 +21,11 @@ func NewImage(catID ...string) *Image {
 	return &Image{ID: id}
 }
 
-func (image *Image) CreateImage(db *mgo.Database, user *User) {
-	image.ID = bson.NewObjectId()
-	image.UserID = user.ID
+func (img *Image) CreateImage(db *mgo.Database, user *User) {
+	img.ID = bson.NewObjectId()
+	img.UserID = user.ID
 
-	if err := db.C("images").Insert(image); err != nil {
+	if err := db.C("images").Insert(img); err != nil {
 		panic(err)
 	}
 }
