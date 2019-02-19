@@ -28,7 +28,7 @@ func NewUser(userID ...string) *User {
 // CreateUser creates a user.
 func (user *User) CreateUser(db *mgo.Database) {
 	if err := db.C("users").Insert(user); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
@@ -41,7 +41,7 @@ func (user *User) ReadUserByAccountID(db *mgo.Database) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -57,7 +57,7 @@ func (user *User) ReadUserByToken(db *mgo.Database) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -71,7 +71,7 @@ func (user *User) UpdateUser(db *mgo.Database) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -93,7 +93,7 @@ func (user *User) GetCategories(db *mgo.Database, options QueryOptions, parentCa
 		Limit(options.Limit).
 		Sort(options.Sort...).
 		All(&items); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	return items
@@ -108,7 +108,7 @@ func (user *User) GetNumCategories(db *mgo.Database, options QueryOptions, paren
 
 	count, err := db.C("categories").Find(query).Count()
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	return count

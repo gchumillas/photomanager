@@ -32,7 +32,7 @@ func (cat *Category) CreateCategory(db *mgo.Database, user *User) {
 	cat.UserID = user.ID
 
 	if err := db.C("categories").Insert(cat); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
@@ -45,7 +45,7 @@ func (cat *Category) ReadCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -62,7 +62,7 @@ func (cat *Category) UpdateCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
@@ -78,7 +78,7 @@ func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
 		case mgo.ErrNotFound:
 			return false
 		default:
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 

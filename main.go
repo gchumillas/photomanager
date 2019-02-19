@@ -46,14 +46,13 @@ func main() {
 
 	session, err := mgo.Dial(conf.Mongo.URI)
 	if err != nil {
-		// TODO: replace log.Fatal by log.Panic
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer session.Close()
 
 	db := session.DB(conf.Mongo.DB)
 	if err = db.Login(conf.Mongo.User, conf.Mongo.Pass); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	env := &handler.Env{DB: db, MaxItemsPerPage: conf.MaxItemsPerPage}
@@ -89,7 +88,7 @@ func main() {
 	imgs.Use(env.AuthMiddleware)
 
 	log.Printf("Server started at port %v", conf.ServerAddr)
-	log.Fatal(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
+	log.Panic(http.ListenAndServe(conf.ServerAddr, handlers.RecoveryHandler()(r)))
 }
 
 func loadConfig(filename string) (conf config) {
@@ -97,13 +96,13 @@ func loadConfig(filename string) (conf config) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	decoder := toml.NewDecoder(file)
 	err = decoder.Decode(&conf)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	return

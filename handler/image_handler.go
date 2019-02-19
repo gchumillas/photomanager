@@ -13,7 +13,7 @@ func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request, maxMemorySiz
 	r.ParseMultipartForm(maxMemorySize)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer file.Close()
 

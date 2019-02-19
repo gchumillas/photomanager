@@ -42,12 +42,12 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		log.Fatal(errors.New(resp.Status))
+		log.Panic(errors.New(resp.Status))
 	}
 
 	var target struct {
@@ -63,7 +63,7 @@ func GetAuthToken(redirectURI, code, appKey, appSecret string) (token, accountID
 func UploadFile(token string, file io.Reader, dest string) {
 	req, err := http.NewRequest("POST", uploadURL, file)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Dropbox-Api-Arg", "{\"path\": \"/image.jpg\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}")
@@ -71,7 +71,7 @@ func UploadFile(token string, file io.Reader, dest string) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer resp.Body.Close()
 }
