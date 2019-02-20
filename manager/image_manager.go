@@ -12,10 +12,10 @@ type Image struct {
 }
 
 // NewImage returns a new image.
-func NewImage(catID ...string) *Image {
+func NewImage(imgID ...string) *Image {
 	var id bson.ObjectId
-	if len(catID) > 0 {
-		id = bson.ObjectIdHex(catID[0])
+	if len(imgID) > 0 {
+		id = bson.ObjectIdHex(imgID[0])
 	}
 
 	return &Image{ID: id}
