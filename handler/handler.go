@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/textproto"
 	"reflect"
 	"strings"
 
@@ -26,6 +27,7 @@ var (
 	payloadError        = httpStatus{"The payload is not well formed.", 400}
 	badParamsError      = httpStatus{"Bad parameters.", 400}
 	duplicateImageError = httpStatus{"Duplicate image.", 400}
+	invalidImageError   = httpStatus{"Invalid image format.", 400}
 	unauthorizedError   = httpStatus{"Not authorized.", 401}
 	docNotFoundError    = httpStatus{"Document not found.", 404}
 )
@@ -74,6 +76,15 @@ func getParam(r *http.Request, key, def string) (param string) {
 	}
 
 	return
+}
+
+func getContentType(header textproto.MIMEHeader) string {
+	cType := ""
+	if len(header["Content-Type"]) > 0 {
+		cType = header["Content-Type"][0]
+	}
+
+	return cType
 }
 
 func inArray(item string, items []string) bool {

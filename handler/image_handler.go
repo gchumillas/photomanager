@@ -13,13 +13,18 @@ import (
 func (env *Env) UploadImage(w http.ResponseWriter, r *http.Request, maxMemorySize int64) {
 	u := getAuthUser(r)
 
-	// TODO: check mimetype
 	r.ParseMultipartForm(maxMemorySize)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
+
+	cType := getContentType(handler.Header)
+	if !strings.HasPrefix(cType, "image/") {
+		httpError(w, invalidImageError)
+		return
+	}
 
 	path := "/" + strings.TrimLeft(handler.Filename, "/")
 	imageID := dbox.UploadFile(u.AccessToken, file, path)
