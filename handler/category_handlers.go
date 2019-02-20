@@ -15,7 +15,7 @@ func (env *Env) GetCategories(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	params := mux.Vars(r)
-	parentCatID := params["id"]
+	parentCatID := params["catID"]
 
 	sortCols := strings.Split(getParam(r, "sort", "name"), ",")
 	for _, col := range sortCols {
@@ -81,7 +81,7 @@ func (env *Env) ReadCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	params := mux.Vars(r)
-	catID := params["id"]
+	catID := params["catID"]
 
 	cat := manager.NewCategory(catID)
 	if !cat.ReadCategory(env.DB, u) {
@@ -97,7 +97,7 @@ func (env *Env) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	params := mux.Vars(r)
-	catID := params["id"]
+	catID := params["catID"]
 
 	var payload struct{ Name string }
 	parsePayload(w, r, &payload)
@@ -119,7 +119,7 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
 	params := mux.Vars(r)
-	catID := params["id"]
+	catID := params["catID"]
 
 	cat := manager.NewCategory(catID)
 	if !cat.DeleteCategory(env.DB, u) {
