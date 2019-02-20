@@ -128,6 +128,7 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// AddImage adds an image to a category.
 func (env *Env) AddImage(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
@@ -147,6 +148,7 @@ func (env *Env) AddImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RemoveImage removes an image from a category.
 func (env *Env) RemoveImage(w http.ResponseWriter, r *http.Request) {
 	u := getAuthUser(r)
 
