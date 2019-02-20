@@ -16,21 +16,20 @@ import (
 type contextKey string
 
 type httpStatus struct {
-	msg  string
 	code int
+	msg  string
 }
 
 var contextAuthUser = contextKey("auth-user")
 
-// TODO: checkout this approach
 // Common http errors.
 var (
-	payloadError        = httpStatus{"The payload is not well formed.", 400}
-	badParamsError      = httpStatus{"Bad parameters.", 400}
-	duplicateImageError = httpStatus{"Duplicate image.", 400}
-	invalidImageError   = httpStatus{"Invalid image format.", 400}
-	unauthorizedError   = httpStatus{"Not authorized.", 401}
-	docNotFoundError    = httpStatus{"Document not found.", 404}
+	payloadError        = httpStatus{400, "The payload is not well formed."}
+	badParamsError      = httpStatus{400, "Bad parameters."}
+	duplicateImageError = httpStatus{400, "Duplicate image."}
+	invalidImageError   = httpStatus{400, "Invalid image format."}
+	unauthorizedError   = httpStatus{401, "Not authorized."}
+	docNotFoundError    = httpStatus{404, "Document not found."}
 )
 
 // Env contains common variables, such as the database access, etc.
