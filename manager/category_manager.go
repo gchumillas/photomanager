@@ -97,3 +97,14 @@ func (cat *Category) AddImage(db *mgo.Database, u *User, img *Image) {
 	cat.ImageIDs = append(cat.ImageIDs, img.ID)
 	cat.UpdateCategory(db, u)
 }
+
+func (cat *Category) RemoveImage(db *mgo.Database, u *User, img *Image) {
+	for i, id := range cat.ImageIDs {
+		if img.ID == id {
+			cat.ImageIDs = append(cat.ImageIDs[:i], cat.ImageIDs[i+1:]...)
+			break
+		}
+	}
+
+	cat.UpdateCategory(db, u)
+}

@@ -79,6 +79,7 @@ func main() {
 	cats.HandleFunc("/{catID}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{catID}", env.DeleteCategory).Methods("DELETE")
 	cats.HandleFunc("/{catID}/images/{imgID}", env.AddImage).Methods("PUT")
+	cats.HandleFunc("/{catID}/images/{imgID}", env.RemoveImage).Methods("DELETE")
 	cats.Use(env.AuthMiddleware)
 
 	// images (private routes)
