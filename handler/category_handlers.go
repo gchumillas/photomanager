@@ -127,3 +127,22 @@ func (env *Env) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (env *Env) AddImage(w http.ResponseWriter, r *http.Request) {
+	u := getAuthUser(r)
+
+	params := mux.Vars(r)
+	catID := params["catID"]
+	imgID := params["imgID"]
+
+	cat := manager.NewCategory(catID)
+	img := manager.NewImage(imgID)
+	if !img.ReadImage(env.DB, u) || !cat.ReadCategory(env.DB, u) {
+		httpError(w, docNotFoundError)
+		return
+	}
+
+	if !cat.HasImage(env.DB, img) {
+		cat.AddImage(env.DB, u, img)
+	}
+}

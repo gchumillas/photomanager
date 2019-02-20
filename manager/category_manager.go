@@ -82,3 +82,18 @@ func (cat *Category) DeleteCategory(db *mgo.Database, user *User) (found bool) {
 
 	return true
 }
+
+func (cat *Category) HasImage(db *mgo.Database, img *Image) bool {
+	for _, imageID := range cat.ImageIDs {
+		if imageID == img.ID {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (cat *Category) AddImage(db *mgo.Database, u *User, img *Image) {
+	cat.ImageIDs = append(cat.ImageIDs, img.ID)
+	cat.UpdateCategory(db, u)
+}

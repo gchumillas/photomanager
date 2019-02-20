@@ -22,6 +22,7 @@ type httpStatus struct {
 
 var contextAuthUser = contextKey("auth-user")
 
+// TODO: checkout this approach
 // Common http errors.
 var (
 	payloadError        = httpStatus{"The payload is not well formed.", 400}

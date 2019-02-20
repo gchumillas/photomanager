@@ -74,10 +74,12 @@ func main() {
 	cats := s.PathPrefix("/categories").Subrouter()
 	cats.HandleFunc("", env.GetCategories).Methods("GET")
 	cats.HandleFunc("", env.CreateCategory).Methods("POST")
+	// TODO: replace {id} by {catID}
 	cats.HandleFunc("/{id}", env.ReadCategory).Methods("GET")
 	cats.HandleFunc("/{id}/categories", env.GetCategories).Methods("GET")
 	cats.HandleFunc("/{id}", env.UpdateCategory).Methods("PUT")
 	cats.HandleFunc("/{id}", env.DeleteCategory).Methods("DELETE")
+	cats.HandleFunc("/{catID}/images/{imgID}", env.AddImage).Methods("PUT")
 	cats.Use(env.AuthMiddleware)
 
 	// images (private routes)

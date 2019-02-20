@@ -30,6 +30,21 @@ func (img *Image) CreateImage(db *mgo.Database, user *User) {
 	}
 }
 
+func (img *Image) ReadImage(db *mgo.Database, user *User) (found bool) {
+	query := bson.M{"_id": img.ID, "userId": user.ID}
+
+	if err := db.C("images").Find(query).One(img); err != nil {
+		switch err {
+		case mgo.ErrNotFound:
+			return false
+		default:
+			panic(err)
+		}
+	}
+
+	return true
+}
+
 func (img *Image) ReadImageByID(db *mgo.Database) (found bool) {
 	query := bson.M{"imageId": img.ImageID}
 
