@@ -13,7 +13,7 @@ Please take a look at the [API documentation](https://documenter.getpostman.com/
 
 ## Create the database
 
-Open a terminal and execute the following commands from the application directory:
+Open a terminal and execute the following command from the application directory:
 ```bash
 $ mongo [ENTER YOUR DATABASE NAME] scripts/dbschema.js
 ```
