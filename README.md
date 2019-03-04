@@ -2,7 +2,7 @@
 
 Photomanager is a REST application aimed primarily at photographers who want to organize their photos into categories, so that the same image can belong to one or more categories.
 
-The user must have a [Dropbox](https://www.dropbox.com) account, so that the application can manage their images. The user can upload an image and then assign it to one or more categories. So simple!
+The user must have a [Dropbox](https://www.dropbox.com) account, so that the application can manage their images.
 
 Please take a look at the [API documentation](https://documenter.getpostman.com/view/412470/S11BzN24) to learn more.
 
