@@ -1,4 +1,4 @@
-# PhotoManager (in progress)
+# PhotoManager
 
 Photomanager is a REST application aimed primarily at photographers who want to organize their photos into categories, so that the same image can belong to one or more categories.
 
