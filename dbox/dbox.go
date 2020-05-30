@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	authURL   = "https://api.dropbox.com/oauth2/authorize"
-	tokenURL  = "https://api.dropbox.com/oauth2/token"
+	authURL   = "https://www.dropbox.com/oauth2/authorize"
+	tokenURL  = "https://api.dropboxapi.com/oauth2/token"
 	uploadURL = "https://content.dropboxapi.com/2/files/upload"
 )
 
