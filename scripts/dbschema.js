@@ -18,6 +18,7 @@ db.createCollection(
       $jsonSchema: {
         bsonType: 'object',
         required: ['accountId', 'accessToken'],
+        additionalProperties: false,
         properties: {
           accountId: {
             bsonType: 'string'
@@ -42,6 +43,7 @@ db.createCollection(
       $jsonSchema: {
         bsonType: 'object',
         required: ['name', 'userId', 'imageIds'],
+        additionalProperties: false,
         properties: {
           name: {
             bsonType: 'string'
@@ -75,6 +77,7 @@ db.createCollection(
       $jsonSchema: {
         bsonType: 'object',
         required: ['userId', 'imageId'],
+        additionalProperties: false,
         properties: {
           userId: {
             bsonType: 'objectId'
